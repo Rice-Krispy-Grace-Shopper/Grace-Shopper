@@ -2,6 +2,7 @@
 
 const db = require('../server/db')
 const {User} = require('../server/db/models')
+const Product = require('../server/db/models/product')
 
 async function seed() {
   await db.sync({force: true})
@@ -9,7 +10,8 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
-    User.create({email: 'murphy@email.com', password: '123'})
+    User.create({email: 'murphy@email.com', password: '123'}),
+    Product.create({name: 'testproduct', price: 10.505})
   ])
 
   console.log(`seeded ${users.length} users`)
