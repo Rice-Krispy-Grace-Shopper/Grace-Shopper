@@ -11,7 +11,18 @@ async function seed() {
   const users = await Promise.all([
     User.create({email: 'cody@email.com', password: '123'}),
     User.create({email: 'murphy@email.com', password: '123'}),
-    Product.create({name: 'testproduct', price: 10.505})
+    User.create({email: 'john@email.com', password: '123'}),
+    User.create({email: 'frank@email.com', password: '123'}),
+    User.create({email: 'jeff@email.com', password: '123'}),
+    User.create({email: 'henry@email.com', password: '123'}),
+    User.create({email: 'george@email.com', password: '123'}),
+    Product.create({name: 'fruity pebbles', price: 10.505}),
+    Product.create({name: 'cookie crunch', price: 7.25}),
+    Product.create({name: 'rice krispies', price: 2.95}),
+    Product.create({name: 'cheerios', price: 3.29}),
+    Product.create({name: 'frosted mini-wheats', price: 4.0}),
+    Product.create({name: 'frosted flakes', price: 2.99}),
+    Product.create({name: 'cocoa puffs', price: 2.99})
   ])
 
   console.log(`seeded ${users.length} users`)
