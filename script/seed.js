@@ -2,6 +2,7 @@
 
 const db = require('../server/db')
 const {User} = require('../server/db/models')
+const Cart = require('../server/db/models/cart')
 const Product = require('../server/db/models/product')
 
 async function seed() {
@@ -36,6 +37,37 @@ async function runSeed() {
   console.log('seeding...')
   try {
     await seed()
+    // for seeding cart data:
+
+    // find murphy, create him a cart and fill it:
+    const murphy = await User.findOne({
+      where: {
+        email: 'murphy@email.com'
+      }
+    })
+    await murphy.createCart()
+    const murphyCart = await Cart.findOne({
+      where: {
+        userId: murphy.id
+      }
+    })
+    murphyCart.contents = [1, 2, 3]
+    await murphyCart.save()
+
+    // find john, create him a cart and fill it:
+    const john = await User.findOne({
+      where: {
+        email: 'john@email.com'
+      }
+    })
+    await john.createCart()
+    const johnCart = await Cart.findOne({
+      where: {
+        userId: john.id
+      }
+    })
+    johnCart.contents = [1, 4, 7]
+    await johnCart.save()
   } catch (err) {
     console.error(err)
     process.exitCode = 1
