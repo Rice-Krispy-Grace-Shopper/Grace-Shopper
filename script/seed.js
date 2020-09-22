@@ -26,6 +26,38 @@ async function seed() {
     Product.create({name: 'cocoa puffs', price: 2.99})
   ])
 
+  // for seeding cart data:
+
+  // find murphy, create him a cart and fill it:
+  const murphy = await User.findOne({
+    where: {
+      email: 'murphy@email.com'
+    }
+  })
+  await murphy.createCart()
+  const murphyCart = await Cart.findOne({
+    where: {
+      userId: murphy.id
+    }
+  })
+  murphyCart.contents = [1, 2, 3]
+  await murphyCart.save()
+
+  // find john, create him a cart and fill it:
+  const john = await User.findOne({
+    where: {
+      email: 'john@email.com'
+    }
+  })
+  await john.createCart()
+  const johnCart = await Cart.findOne({
+    where: {
+      userId: john.id
+    }
+  })
+  johnCart.contents = [1, 4, 7]
+  await johnCart.save()
+
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
 }
@@ -37,37 +69,6 @@ async function runSeed() {
   console.log('seeding...')
   try {
     await seed()
-    // for seeding cart data:
-
-    // find murphy, create him a cart and fill it:
-    const murphy = await User.findOne({
-      where: {
-        email: 'murphy@email.com'
-      }
-    })
-    await murphy.createCart()
-    const murphyCart = await Cart.findOne({
-      where: {
-        userId: murphy.id
-      }
-    })
-    murphyCart.contents = [1, 2, 3]
-    await murphyCart.save()
-
-    // find john, create him a cart and fill it:
-    const john = await User.findOne({
-      where: {
-        email: 'john@email.com'
-      }
-    })
-    await john.createCart()
-    const johnCart = await Cart.findOne({
-      where: {
-        userId: john.id
-      }
-    })
-    johnCart.contents = [1, 4, 7]
-    await johnCart.save()
   } catch (err) {
     console.error(err)
     process.exitCode = 1
