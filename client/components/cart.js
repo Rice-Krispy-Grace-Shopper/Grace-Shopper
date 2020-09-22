@@ -11,7 +11,6 @@ class Cart extends Component {
 
   render() {
     const cart = this.props.cart
-    console.log('user on state-->', this.props.user)
     return (
       <React.Fragment>
         <h1>Cart</h1>
