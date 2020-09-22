@@ -3,67 +3,112 @@ import axios from 'axios'
 /**
  * ACTION TYPES
  */
-const GET_USER = 'GET_USER'
-const REMOVE_USER = 'REMOVE_USER'
+const GET_PRODUCTS = 'GET_PRODUCTS'
+const ADD_PRODUCTS = 'ADD_PRODUCTS'
+const GET_SINGLE = 'GET_SINGLE'
+const DELETE_PRODUCTS = 'DELETE_PRODUCTS'
+const UPDATE_PRODUCTS = 'UPDATE_PRODUCTS'
 
 /**
  * INITIAL STATE
  */
-const defaultUser = {}
+const initialState = {}
 
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
-const removeUser = () => ({type: REMOVE_USER})
+const getProducts = products => ({
+  type: GET_PRODUCTS,
+  products
+})
+
+const addProducts = product => ({
+  type: ADD_PRODUCTS,
+  product
+})
+
+const getSingle = product => ({
+  type: GET_SINGLE,
+  product
+})
+
+const deleteProduct = product => ({
+  type: DELETE_PRODUCTS,
+  product
+})
+
+const updateProduct = product => ({
+  type: UPDATE_PRODUCTS,
+  product
+})
 
 /**
  * THUNK CREATORS
  */
-export const me = () => async dispatch => {
+
+export const gotProducts = () => async dispatch => {
   try {
-    const res = await axios.get('/auth/me')
-    dispatch(getUser(res.data || defaultUser))
-  } catch (err) {
-    console.error(err)
+    const {data: products} = await axios.get('/api/products')
+    dispatch(getProducts(products))
+  } catch (error) {
+    console.error(error)
   }
 }
 
-export const auth = (email, password, method) => async dispatch => {
-  let res
+export const gotSingle = id => async dispatch => {
   try {
-    res = await axios.post(`/auth/${method}`, {email, password})
-  } catch (authError) {
-    return dispatch(getUser({error: authError}))
-  }
-
-  try {
-    dispatch(getUser(res.data))
-    history.push('/home')
-  } catch (dispatchOrHistoryErr) {
-    console.error(dispatchOrHistoryErr)
+    const {data: single} = await axios.get(`/api/products/${id}`)
+    dispatch(getSingle(single))
+  } catch (error) {
+    console.error(error)
   }
 }
 
-export const logout = () => async dispatch => {
+export const addedProduct = product => async dispatch => {
   try {
-    await axios.post('/auth/logout')
-    dispatch(removeUser())
-    history.push('/login')
-  } catch (err) {
-    console.error(err)
+    const {data: newProduct} = await axios.post('/api/products', product)
+    dispatch(addProducts(newProduct))
+  } catch (error) {
+    console.error(error)
   }
 }
 
+export const deletedProduct = id => async dispatch => {
+  try {
+    await axios.delete(`/api/products/${id}`)
+    dispatch(deleteProduct(id))
+    dispatch(gotProducts())
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const updatedProduct = (id, productUpdate) => async dispatch => {
+  try {
+    const res = await axios.put(`/api/products/${id}`, productUpdate)
+    dispatch(updateProduct(res.data))
+    dispatch(gotSingle(id))
+  } catch (error) {
+    console.error(error)
+  }
+}
 /**
  * REDUCER
  */
-export default function(state = defaultUser, action) {
+export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_USER:
-      return action.user
-    case REMOVE_USER:
-      return defaultUser
+    case GET_PRODUCTS:
+      return {...state, products: action.products}
+    case GET_SINGLE:
+      return {...state, product: action.product}
+    case ADD_PRODUCTS:
+      return [...state, action.product]
+    case DELETE_PRODUCTS:
+      return state.filter(product => product.id !== action)
+    case UPDATE_PRODUCTS:
+      return state.filter(
+        product => (product.id === action.product.id ? action.product : product)
+      )
     default:
       return state
   }
