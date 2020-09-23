@@ -17,13 +17,13 @@ async function seed() {
     User.create({email: 'jeff@email.com', password: '123'}),
     User.create({email: 'henry@email.com', password: '123'}),
     User.create({email: 'george@email.com', password: '123'}),
-    Product.create({name: 'fruity pebbles', price: 10.505}),
-    Product.create({name: 'cookie crunch', price: 7.25}),
-    Product.create({name: 'rice krispies', price: 2.95}),
-    Product.create({name: 'cheerios', price: 3.29}),
-    Product.create({name: 'frosted mini-wheats', price: 4.0}),
-    Product.create({name: 'frosted flakes', price: 2.99}),
-    Product.create({name: 'cocoa puffs', price: 2.99})
+    Product.create({name: 'fruity pebbles', price: 1051}),
+    Product.create({name: 'cookie crunch', price: 725}),
+    Product.create({name: 'rice krispies', price: 299}),
+    Product.create({name: 'cheerios', price: 329}),
+    Product.create({name: 'frosted mini-wheats', price: 400}),
+    Product.create({name: 'frosted flakes', price: 299}),
+    Product.create({name: 'cocoa puffs', price: 299})
   ])
 
   // for seeding cart data:
