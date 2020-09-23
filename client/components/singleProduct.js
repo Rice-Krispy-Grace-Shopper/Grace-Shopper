@@ -6,7 +6,7 @@ export class SingleProduct extends React.Component {
   constructor() {
     super()
     this.state = {
-      count: 1
+      count: 0
     }
     this.increment = this.increment.bind(this)
   }
@@ -40,6 +40,7 @@ export class SingleProduct extends React.Component {
           >
             Add To Cart
           </button>
+          <h4>Quantity Added to Cart: {this.state.count}</h4>
         </div>
       )
     } else {
