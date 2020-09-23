@@ -1,7 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {gotSingle} from '../store/product'
-import {Link, Switch} from 'react-router-dom'
 
 export class SingleProduct extends React.Component {
   async componentDidMount() {
@@ -18,6 +17,9 @@ export class SingleProduct extends React.Component {
           <img src={product.imageUrl} width="300" height="300" />
           <h3>${(product.price / 100).toFixed(2)}</h3>
           <h4>{product.description}</h4>
+          <button type="button" onClick={notEmpty}>
+            Add To Cart
+          </button>
         </div>
       )
     } else {
