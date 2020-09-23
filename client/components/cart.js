@@ -1,16 +1,32 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
-import {getCart} from '../store/cart'
+import {getCart, incrementItemQty, decrementItemQty} from '../store/cart'
 
 class Cart extends Component {
+  constructor(props) {
+    super(props)
+    this.handleIncrement = this.handleIncrement.bind(this)
+    this.handleDecrement = this.handleDecrement.bind(this)
+  }
+
   async componentDidMount() {
     await this.props.getUser()
     await this.props.getCart(this.props.user.id)
   }
 
+  handleIncrement(userId, productId) {
+    this.props.increment(userId, productId)
+  }
+
+  handleDecrement(userId, productId) {
+    this.props.decrement(userId, productId)
+  }
+
   render() {
     const cart = this.props.cart
+    const user = this.props.user
+
     return (
       <React.Fragment>
         <h1>Cart</h1>
@@ -20,9 +36,19 @@ class Cart extends Component {
               <div key={item.id} className="CartItem">
                 {item.name}
                 <div className="CartItemEditDiv">
-                  <button type="button">-</button>
+                  <button
+                    type="button"
+                    onClick={() => this.handleDecrement(user.id, item.id)}
+                  >
+                    -
+                  </button>
                   <div className="CartItemQty">{item.qty}</div>
-                  <button type="button">+</button>
+                  <button
+                    type="button"
+                    onClick={() => this.handleIncrement(user.id, item.id)}
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             ))}
@@ -42,7 +68,11 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   getUser: () => dispatch(me()),
-  getCart: userId => dispatch(getCart(userId))
+  getCart: userId => dispatch(getCart(userId)),
+  increment: (userId, productId) =>
+    dispatch(incrementItemQty(userId, productId)),
+  decrement: (userId, productId) =>
+    dispatch(decrementItemQty(userId, productId))
 })
 
 export default connect(mapState, mapDispatch)(Cart)
