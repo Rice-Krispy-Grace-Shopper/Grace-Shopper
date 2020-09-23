@@ -21,12 +21,20 @@ router.get('/:userId', async (req, res, next) => {
     const productsInCart = await Product.findAll({
       where: {
         id: {
-          [Op.in]: cart.contents
+          [Op.in]: cart.contents.map(item => item[0])
         }
       }
     })
 
-    res.json(productsInCart)
+    // add quantities to each single product before serving up:
+    const productsWithQty = productsInCart.map(product => {
+      const quantity = cart.contents.find(item => item[0] === product.id)[1]
+      return Object.assign(product.dataValues, {
+        qty: quantity
+      })
+    })
+
+    res.json(productsWithQty)
   } catch (err) {
     next(err)
   }
