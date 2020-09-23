@@ -19,7 +19,7 @@ async function seed() {
     User.create({email: 'george@email.com', password: '123'}),
     Product.create({name: 'fruity pebbles', price: 1051}),
     Product.create({name: 'cookie crunch', price: 725}),
-    Product.create({name: 'rice krispies', price: 299}),
+    Product.create({name: 'rice krispies', price: 295}),
     Product.create({name: 'cheerios', price: 329}),
     Product.create({name: 'frosted mini-wheats', price: 400}),
     Product.create({name: 'frosted flakes', price: 299}),
