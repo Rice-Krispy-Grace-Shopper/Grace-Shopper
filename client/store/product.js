@@ -77,7 +77,6 @@ export const deletedProduct = id => async dispatch => {
   try {
     await axios.delete(`/api/products/${id}`)
     dispatch(deleteProduct(id))
-    dispatch(gotProducts())
   } catch (error) {
     console.error(error)
   }
@@ -87,7 +86,6 @@ export const updatedProduct = (id, productUpdate) => async dispatch => {
   try {
     const res = await axios.put(`/api/products/${id}`, productUpdate)
     dispatch(updateProduct(res.data))
-    dispatch(gotSingle(id))
   } catch (error) {
     console.error(error)
   }
@@ -95,7 +93,7 @@ export const updatedProduct = (id, productUpdate) => async dispatch => {
 /**
  * REDUCER
  */
-export default function(state = initialState, action) {
+export default function(state = [], action) {
   switch (action.type) {
     case GET_PRODUCTS:
       return {...state, products: action.products}
