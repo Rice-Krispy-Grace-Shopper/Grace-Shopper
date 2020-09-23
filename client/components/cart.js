@@ -15,13 +15,18 @@ class Cart extends Component {
       <React.Fragment>
         <h1>Cart</h1>
         {cart ? (
-          <ul>
+          <div className="CartContents">
             {cart.map(item => (
-              <li key={item.id}>
-                {item.name} {item.qty}
-              </li>
+              <div key={item.id} className="CartItem">
+                {item.name}
+                <div className="CartItemEditDiv">
+                  <button type="button">-</button>
+                  <div className="CartItemQty">{item.qty}</div>
+                  <button type="button">+</button>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           'no items in cart'
         )}
