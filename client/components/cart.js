@@ -25,6 +25,7 @@ class Cart extends Component {
 
   render() {
     const cart = this.props.cart
+    console.log('CART IN COMP->', cart)
     const user = this.props.user
 
     return (
