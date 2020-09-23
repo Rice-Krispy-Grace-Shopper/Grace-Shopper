@@ -16,7 +16,7 @@ export class SingleProduct extends React.Component {
         <div>
           <h2>{product.name}</h2>
           <img src={product.imageUrl} width="300" height="300" />
-          <h3>{product.price}</h3>
+          <h3>${(product.price / 100).toFixed(2)}</h3>
           <h4>{product.description}</h4>
         </div>
       )
