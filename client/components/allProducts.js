@@ -20,7 +20,7 @@ export class AllProducts extends React.Component {
                   <img src={product.imageUrl} width="200" height="100" />
                   <h2>{product.name}</h2>
                 </Link>
-                <h4>{product.price}</h4>
+                <h4>${(product.price / 100).toFixed(2)}</h4>
               </div>
             )
           })}
