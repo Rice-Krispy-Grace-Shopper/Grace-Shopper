@@ -40,7 +40,7 @@ async function seed() {
       userId: murphy.id
     }
   })
-  murphyCart.contents = [1, 2, 3]
+  murphyCart.contents = [[1], [2], [3]]
   await murphyCart.save()
 
   // find john, create him a cart and fill it:
@@ -55,7 +55,7 @@ async function seed() {
       userId: john.id
     }
   })
-  johnCart.contents = [1, 4, 7]
+  johnCart.contents = [[1], [4], [7]]
   await johnCart.save()
 
   console.log(`seeded ${users.length} users`)

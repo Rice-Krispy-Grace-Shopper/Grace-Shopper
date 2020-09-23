@@ -34,9 +34,11 @@ router.get('/:id', async (req, res, next) => {
     next(error)
   }
 })
+
 //delete single product -- admin only
-router.delete(':id', isAdminMiddleware, async (req, res, next) => {
+router.delete('/:id', isAdminMiddleware, async (req, res, next) => {
   try {
+    res.json('hello')
     await Product.destroy({where: {id: req.params.id}})
     res.sendStatus(204)
   } catch (error) {
@@ -45,7 +47,7 @@ router.delete(':id', isAdminMiddleware, async (req, res, next) => {
 })
 
 //update single product -- admin only
-router.put(':id', isAdminMiddleware, async (req, res, next) => {
+router.put('/:id', isAdminMiddleware, async (req, res, next) => {
   try {
     const selectedProduct = await Product.findOne({
       where: {id: req.params.id}
@@ -61,7 +63,7 @@ router.put(':id', isAdminMiddleware, async (req, res, next) => {
   }
 })
 
-//add single produc --admin only
+//add single product --admin only
 router.post('/', isAdminMiddleware, async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body)
