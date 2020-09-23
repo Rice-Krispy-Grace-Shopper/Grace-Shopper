@@ -1,9 +1,22 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {gotSingle} from '../store/product'
-import {Link, Switch} from 'react-router-dom'
 
 export class SingleProduct extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      count: 1
+    }
+    this.increment = this.increment.bind(this)
+  }
+
+  increment() {
+    this.setState(prevState => ({
+      count: prevState.count + 1
+    }))
+  }
+
   async componentDidMount() {
     const id = this.props.match.params.id
     await this.props.getSingle(id)
@@ -18,6 +31,15 @@ export class SingleProduct extends React.Component {
           <img src={product.imageUrl} width="300" height="300" />
           <h3>${(product.price / 100).toFixed(2)}</h3>
           <h4>{product.description}</h4>
+          <button
+            type="button"
+            onClick={
+              () => this.increment()
+              // cart.innerHTML (THIS WILL UPDATE CARTS QUANTITY) = this.state.count
+            }
+          >
+            Add To Cart
+          </button>
         </div>
       )
     } else {
