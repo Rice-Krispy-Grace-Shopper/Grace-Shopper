@@ -5,32 +5,36 @@ import {Link, Switch} from 'react-router-dom'
 
 export class SingleProduct extends React.Component {
   async componentDidMount() {
-    const id = this.props.match.id
-    await this.props.getSingle()
+    const id = this.props.match.params.id
+    await this.props.getSingle(id)
   }
 
   render() {
     const product = this.props.product
-    return (
-      <div key={product.id}>
-        <h2>{product.name}</h2>
-        <img src={product.imageUrl} />
-        <h3>{product.price}</h3>
-        <h4>{product.description}</h4>
-      </div>
-    )
+    if (product) {
+      return (
+        <div>
+          <h2>{product.name}</h2>
+          <img src={product.imageUrl} width="300" height="300" />
+          <h3>{product.price}</h3>
+          <h4>{product.description}</h4>
+        </div>
+      )
+    } else {
+      return <div />
+    }
   }
 }
 
 const mapState = state => {
   return {
-    product: state.product
+    product: state.products.product
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getSingle: (id = dispatch(gotSingle(id)))
+    getSingle: id => dispatch(gotSingle(id))
   }
 }
 

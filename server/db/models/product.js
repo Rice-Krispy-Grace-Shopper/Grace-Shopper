@@ -13,7 +13,7 @@ const Product = db.define('product', {
     type: Sequelize.TEXT
   },
   price: {
-    type: Sequelize.DECIMAL(10, 2)
+    type: Sequelize.INTEGER
   },
   imageUrl: {
     type: Sequelize.TEXT,
