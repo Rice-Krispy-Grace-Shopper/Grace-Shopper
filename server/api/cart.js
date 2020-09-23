@@ -39,3 +39,49 @@ router.get('/:userId', async (req, res, next) => {
     next(err)
   }
 })
+
+// PUT /api/cart/:userId/:productId/inc
+router.put('/:userId/:productId/inc', async (req, res, next) => {
+  try {
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
+    })
+
+    cart.contents.forEach(item => {
+      let productId = item[0]
+
+      // increment quantity for that product in cart
+      if (productId === Number(req.params.productId)) item[1]++
+    })
+
+    cart.changed('contents', true)
+    await cart.save()
+
+    res.json(cart)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// PUT /api/cart/:userId/:productId/dec
+router.put('/:userId/:productId/dec', async (req, res, next) => {
+  try {
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
+    })
+
+    cart.contents.forEach(item => {
+      let productId = item[0]
+
+      // decrement quantity for that product in cart (if positive qty exists)
+      if (productId === Number(req.params.productId) && item[1] > 0) item[1]--
+    })
+
+    cart.changed('contents', true)
+    await cart.save()
+
+    res.json(cart)
+  } catch (error) {
+    next(error)
+  }
+})
