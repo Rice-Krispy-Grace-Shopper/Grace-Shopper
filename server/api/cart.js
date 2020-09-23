@@ -27,14 +27,14 @@ router.get('/:userId', async (req, res, next) => {
     })
 
     // add quantities to each single product before serving up:
-    const productsWithQty = productsInCart.map(product => {
+    productsInCart.forEach(product => {
       const quantity = cart.contents.find(item => item[0] === product.id)[1]
-      return Object.assign(product.dataValues, {
+      Object.assign(product.dataValues, {
         qty: quantity
       })
     })
 
-    res.json(productsWithQty)
+    res.json(productsInCart)
   } catch (err) {
     next(err)
   }
