@@ -27,7 +27,9 @@ class Cart extends Component {
   }
 
   async handleDecrement(userId, productId) {
-    await this.props.decrement(userId, productId)
+    const item = this.props.cart.find(item => item.id === productId)
+    if (item.qty === 1) await this.props.deleteItem(userId, productId)
+    else await this.props.decrement(userId, productId)
     await this.props.getCart(this.props.user.id)
   }
 

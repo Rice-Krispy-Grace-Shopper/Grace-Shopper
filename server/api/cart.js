@@ -94,8 +94,8 @@ router.put('/:userId/:productId/dec', async (req, res, next) => {
     cart.contents.forEach(item => {
       let productId = item[0]
 
-      // decrement quantity for that product in cart (if positive qty exists)
-      if (productId === Number(req.params.productId) && item[1] > 0) item[1]--
+      // decrement quantity for that product in cart
+      if (productId === Number(req.params.productId)) item[1]--
     })
 
     cart.changed('contents', true)
