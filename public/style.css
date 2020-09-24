@@ -35,3 +35,7 @@ form div {
 .CartItemQty {
   margin: 0 1em;
 }
+
+.CartRemoveItem {
+  margin-left: 1em;
+}

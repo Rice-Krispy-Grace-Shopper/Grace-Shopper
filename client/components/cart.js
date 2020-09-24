@@ -1,13 +1,19 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
-import {getCart, incrementItemQty, decrementItemQty} from '../store/cart'
+import {
+  getCart,
+  incrementItemQty,
+  decrementItemQty,
+  deleteFromCart
+} from '../store/cart'
 
 class Cart extends Component {
   constructor(props) {
     super(props)
     this.handleIncrement = this.handleIncrement.bind(this)
     this.handleDecrement = this.handleDecrement.bind(this)
+    this.handleDeleteItem = this.handleDeleteItem.bind(this)
   }
 
   async componentDidMount() {
@@ -22,6 +28,11 @@ class Cart extends Component {
 
   async handleDecrement(userId, productId) {
     await this.props.decrement(userId, productId)
+    await this.props.getCart(this.props.user.id)
+  }
+
+  async handleDeleteItem(userId, productId) {
+    await this.props.deleteItem(userId, productId)
     await this.props.getCart(this.props.user.id)
   }
 
@@ -51,6 +62,13 @@ class Cart extends Component {
                   >
                     +
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => this.handleDeleteItem(user.id, item.id)}
+                    className="CartRemoveItem"
+                  >
+                    &times;
+                  </button>
                 </div>
               </div>
             ))}
@@ -74,7 +92,8 @@ const mapDispatch = dispatch => ({
   increment: (userId, productId) =>
     dispatch(incrementItemQty(userId, productId)),
   decrement: (userId, productId) =>
-    dispatch(decrementItemQty(userId, productId))
+    dispatch(decrementItemQty(userId, productId)),
+  deleteItem: (userId, productId) => dispatch(deleteFromCart(userId, productId))
 })
 
 export default connect(mapState, mapDispatch)(Cart)
