@@ -12,10 +12,8 @@ const gotCart = cart => ({
   cart
 })
 
-// refactor -- remove cart param
-const updatedCart = cart => ({
-  type: UPDATE_CART,
-  cart
+const updatedCart = () => ({
+  type: UPDATE_CART
 })
 
 const addedToCart = () => ({
