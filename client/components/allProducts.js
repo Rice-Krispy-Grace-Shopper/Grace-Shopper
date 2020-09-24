@@ -17,13 +17,11 @@ export class AllProducts extends React.Component {
     await this.props.getCart(this.props.user.id)
   }
 
-  // this is working for items already in cart, need to write up backend to POST new item into cart if not already there
   async handleAddToCart(userId, productId) {
-    // check for item in cart (may help to make this a helper function in a utils file):
-    const itemIsInCart = this.props.cart.find(item => item.id === productId)
-    // refactor this:
-    if (itemIsInCart === undefined)
-      await this.props.addToCart(userId, productId)
+    const itemIdxInCart = this.props.cart.findIndex(
+      item => item.id === productId
+    )
+    if (itemIdxInCart === -1) await this.props.addToCart(userId, productId)
     await this.props.increment(userId, productId)
     this.props.history.push('/cart')
   }
