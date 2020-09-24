@@ -43,7 +43,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-// POST /api/cart/:userId/:productId/add
+// POST /api/cart/:userId/:productId/add -- add item to cart
 router.post('/:userId/:productId/add', async (req, res, next) => {
   try {
     const cart = await Cart.findOne({
@@ -60,7 +60,7 @@ router.post('/:userId/:productId/add', async (req, res, next) => {
   }
 })
 
-// PUT /api/cart/:userId/:productId/inc
+// PUT /api/cart/:userId/:productId/inc -- increment item qty in cart
 router.put('/:userId/:productId/inc', async (req, res, next) => {
   try {
     const cart = await Cart.findOne({
@@ -77,13 +77,14 @@ router.put('/:userId/:productId/inc', async (req, res, next) => {
     cart.changed('contents', true)
     await cart.save()
 
+    // double check first but don't think this is used, just sendStatus(204)
     res.json(cart)
   } catch (error) {
     next(error)
   }
 })
 
-// PUT /api/cart/:userId/:productId/dec
+// PUT /api/cart/:userId/:productId/dec --  decrement item qty in cart
 router.put('/:userId/:productId/dec', async (req, res, next) => {
   try {
     const cart = await Cart.findOne({
@@ -100,7 +101,29 @@ router.put('/:userId/:productId/dec', async (req, res, next) => {
     cart.changed('contents', true)
     await cart.save()
 
+    // double check first but don't think this is used, just sendStatus(204)
     res.json(cart)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// DELETE /api/cart/:userId/:productId/delete -- remove item from cart
+router.delete('/:userId/:productId/delete', async (req, res, next) => {
+  try {
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
+    })
+    const itemIdx = cart.contents.findIndex(
+      item => item[0] === +req.params.productId
+    )
+
+    // conditional is just a safety net in case findIndex returns -1, but it never should:
+    if (itemIdx > 0) cart.contents.splice(itemIdx, 1)
+    cart.changed('contents', true)
+    await cart.save()
+
+    res.sendStatus(204)
   } catch (error) {
     next(error)
   }
