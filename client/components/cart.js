@@ -1,22 +1,86 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
-import {getCart} from '../store/cart'
+import {
+  getCart,
+  incrementItemQty,
+  decrementItemQty,
+  deleteFromCart
+} from '../store/cart'
 
 class Cart extends Component {
+  constructor(props) {
+    super(props)
+    this.handleIncrement = this.handleIncrement.bind(this)
+    this.handleDecrement = this.handleDecrement.bind(this)
+    this.handleDeleteItem = this.handleDeleteItem.bind(this)
+  }
+
   async componentDidMount() {
     await this.props.getUser()
     await this.props.getCart(this.props.user.id)
   }
 
+  async handleIncrement(userId, productId) {
+    await this.props.increment(userId, productId)
+    await this.props.getCart(this.props.user.id)
+  }
+
+  async handleDecrement(userId, productId) {
+    const item = this.props.cart.find(item => item.id === productId)
+    if (item.qty === 1) await this.props.deleteItem(userId, productId)
+    else await this.props.decrement(userId, productId)
+    await this.props.getCart(this.props.user.id)
+  }
+
+  async handleDeleteItem(userId, productId) {
+    await this.props.deleteItem(userId, productId)
+    await this.props.getCart(this.props.user.id)
+  }
+
   render() {
     const cart = this.props.cart
+    const user = this.props.user
+
     return (
       <React.Fragment>
         <h1>Cart</h1>
         {cart ? (
-          <ul>{cart.map(item => <li key={item.id}>{item.name}</li>)}</ul>
+          <div className="CartContents">
+            {cart.length
+              ? cart.map(item => (
+                  <div key={item.id} className="CartItem">
+                    {item.name}
+                    <div className="CartItemEditDiv">
+                      <button
+                        type="button"
+                        onClick={() => this.handleDecrement(user.id, item.id)}
+                        className="CartDecrement"
+                      >
+                        -
+                      </button>
+                      <div className="CartItemQty">{item.qty}</div>
+                      <button
+                        type="button"
+                        onClick={() => this.handleIncrement(user.id, item.id)}
+                        className="CartIncrement"
+                      >
+                        +
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => this.handleDeleteItem(user.id, item.id)}
+                        className="CartRemoveItem"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+                ))
+              : 'no items in cart'}
+          </div>
         ) : (
+          // this is for when no user is logged in if not cart exists at all, remove once guest features are added:
           'no items in cart'
         )}
       </React.Fragment>
@@ -31,7 +95,12 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   getUser: () => dispatch(me()),
-  getCart: userId => dispatch(getCart(userId))
+  getCart: userId => dispatch(getCart(userId)),
+  increment: (userId, productId) =>
+    dispatch(incrementItemQty(userId, productId)),
+  decrement: (userId, productId) =>
+    dispatch(decrementItemQty(userId, productId)),
+  deleteItem: (userId, productId) => dispatch(deleteFromCart(userId, productId))
 })
 
 export default connect(mapState, mapDispatch)(Cart)

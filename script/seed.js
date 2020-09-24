@@ -10,23 +10,6 @@ async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  // const users = await Promise.all([
-  //   User.create({email: 'cody@email.com', password: '123'}),
-  //   User.create({email: 'murphy@email.com', password: '123'}),
-  //   User.create({email: 'john@email.com', password: '123'}),
-  //   User.create({email: 'frank@email.com', password: '123'}),
-  //   User.create({email: 'jeff@email.com', password: '123'}),
-  //   User.create({email: 'henry@email.com', password: '123'}),
-  //   User.create({email: 'george@email.com', password: '123'}),
-  //   Product.create({name: 'fruity pebbles', price: 1051}),
-  //   Product.create({name: 'cookie crunch', price: 725}),
-  //   Product.create({name: 'rice krispies', price: 295}),
-  //   Product.create({name: 'cheerios', price: 329}),
-  //   Product.create({name: 'frosted mini-wheats', price: 400}),
-  //   Product.create({name: 'frosted flakes', price: 299}),
-  //   Product.create({name: 'cocoa puffs', price: 299})
-  // ])
-
   let users = []
   for (let i = 0; i < 100; i++) {
     const name = faker.name.firstName()
@@ -34,8 +17,10 @@ async function seed() {
       email: faker.internet.email(name),
       password: faker.internet.password()
     }
+
     users.push(newUser)
   }
+
 
   let products = []
   for (let j = 0; j < 100; j++) {
