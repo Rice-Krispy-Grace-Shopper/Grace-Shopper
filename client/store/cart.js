@@ -57,7 +57,6 @@ export default function(state = cart, action) {
     case UPDATE_CART:
       return {
         ...state
-        // cart: action.cart
       }
     default:
       return state
