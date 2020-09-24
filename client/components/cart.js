@@ -80,7 +80,8 @@ class Cart extends Component {
               : 'no items in cart'}
           </div>
         ) : (
-          'this should never render -- may be able to remove conditional -- thoroughly check for errors if removed, may require some debugging to remove'
+          // this is for when no user is logged in if not cart exists at all, remove once guest features are added:
+          'no items in cart'
         )}
       </React.Fragment>
     )
