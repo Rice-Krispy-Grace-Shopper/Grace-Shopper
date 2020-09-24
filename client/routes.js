@@ -8,7 +8,8 @@ import {
   UserHome,
   allProducts,
   Cart,
-  SingleProduct
+  SingleProduct,
+  Checkout
 } from './components'
 import {me} from './store'
 
@@ -33,6 +34,7 @@ class Routes extends Component {
           <Route exact path="/products" component={allProducts} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/products/:id" component={SingleProduct} />
+          <Route path="/checkout" component={Checkout} />
           {isLoggedIn && (
             <Switch>
               {/* Routes placed here are only available after logging in */}
