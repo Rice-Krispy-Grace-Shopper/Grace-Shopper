@@ -2,7 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {me} from '../store/user'
 import {gotSingle} from '../store/product'
-import {incrementItemQty} from '../store/cart'
+import {getCart, incrementItemQty, addToCart} from '../store/cart'
 
 export class SingleProduct extends React.Component {
   constructor(props) {
@@ -14,10 +14,16 @@ export class SingleProduct extends React.Component {
     const id = this.props.match.params.id
     await this.props.getSingle(id)
     await this.props.getUser()
+    await this.props.getCart(this.props.user.id)
   }
 
   // this is working for items already in cart, need to write up backend to POST new item into cart if not already there
   async handleAddToCart(userId, productId) {
+    // check for item in cart (may help to make this a helper function in a utils file):
+    const itemIsInCart = this.props.cart.find(item => item.id === productId)
+    // refactor this:
+    if (itemIsInCart === undefined)
+      await this.props.addToCart(userId, productId)
     await this.props.increment(userId, productId)
     this.props.history.push('/cart')
   }
@@ -50,14 +56,17 @@ export class SingleProduct extends React.Component {
 const mapState = state => {
   return {
     product: state.products.product,
-    user: state.user
+    user: state.user,
+    cart: state.cart.cart
   }
 }
 
 const mapDispatch = dispatch => {
   return {
     getUser: () => dispatch(me()),
+    getCart: userId => dispatch(getCart(userId)),
     getSingle: id => dispatch(gotSingle(id)),
+    addToCart: (userId, productId) => dispatch(addToCart(userId, productId)),
     increment: (userId, productId) =>
       dispatch(incrementItemQty(userId, productId))
   }

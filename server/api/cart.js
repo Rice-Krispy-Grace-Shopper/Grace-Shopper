@@ -6,6 +6,8 @@ module.exports = router
 // GET /api/cart/:userId
 router.get('/:userId', async (req, res, next) => {
   try {
+    // retrieve user's cart -- an array of arrays containing pointer to productIds & qty in cart
+    // shape of cart: [ [ productId, productQty], ... ]
     const cart = await Cart.findOne({
       where: {userId: req.params.userId}
     })
@@ -18,6 +20,7 @@ router.get('/:userId', async (req, res, next) => {
       return
     }
 
+    // retrive a collection of products to server up -- based on cart with pointers
     const productsInCart = await Product.findAll({
       where: {
         id: {
@@ -26,7 +29,7 @@ router.get('/:userId', async (req, res, next) => {
       }
     })
 
-    // add quantities to each single product before serving up:
+    // add quantities to each single product on cart collection before serving up:
     productsInCart.forEach(product => {
       const quantity = cart.contents.find(item => item[0] === product.id)[1]
       Object.assign(product.dataValues, {
@@ -37,6 +40,23 @@ router.get('/:userId', async (req, res, next) => {
     res.json(productsInCart)
   } catch (err) {
     next(err)
+  }
+})
+
+// POST /api/cart/:userId/:productId/add
+router.post('/:userId/:productId/add', async (req, res, next) => {
+  try {
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
+    })
+
+    cart.contents.push([+req.params.productId, 0])
+    cart.changed('contents', true)
+    await cart.save()
+
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
   }
 })
 

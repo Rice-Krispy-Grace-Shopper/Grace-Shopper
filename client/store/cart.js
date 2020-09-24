@@ -3,6 +3,7 @@ import axios from 'axios'
 // ACTION TYPES
 const GET_CART = 'GET_CART'
 const UPDATE_CART = 'UPDATE_CART'
+const ADD_TO_CART = 'ADD_TO_CART'
 
 // ACTION CREATORS
 const gotCart = cart => ({
@@ -10,9 +11,14 @@ const gotCart = cart => ({
   cart
 })
 
+// refactor -- remove cart param
 const updatedCart = cart => ({
   type: UPDATE_CART,
   cart
+})
+
+const addedToCart = () => ({
+  type: ADD_TO_CART
 })
 
 // THUNK CREATORS
@@ -43,6 +49,15 @@ export const decrementItemQty = (userId, productId) => async dispatch => {
   }
 }
 
+export const addToCart = (userId, productId) => async dispatch => {
+  try {
+    await axios.post(`/api/cart/${userId}/${productId}/add`)
+    dispatch(addedToCart())
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // INITIAL STATE
 const cart = {}
 
@@ -55,6 +70,10 @@ export default function(state = cart, action) {
         cart: action.cart
       }
     case UPDATE_CART:
+      return {
+        ...state
+      }
+    case ADD_TO_CART:
       return {
         ...state
       }
