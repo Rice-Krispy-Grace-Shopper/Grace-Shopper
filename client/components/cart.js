@@ -15,17 +15,18 @@ class Cart extends Component {
     await this.props.getCart(this.props.user.id)
   }
 
-  handleIncrement(userId, productId) {
-    this.props.increment(userId, productId)
+  async handleIncrement(userId, productId) {
+    await this.props.increment(userId, productId)
+    await this.props.getCart(this.props.user.id)
   }
 
-  handleDecrement(userId, productId) {
-    this.props.decrement(userId, productId)
+  async handleDecrement(userId, productId) {
+    await this.props.decrement(userId, productId)
+    await this.props.getCart(this.props.user.id)
   }
 
   render() {
     const cart = this.props.cart
-    console.log('CART IN COMP->', cart)
     const user = this.props.user
 
     return (

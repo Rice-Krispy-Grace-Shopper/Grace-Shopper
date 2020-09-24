@@ -42,7 +42,6 @@ async function seed() {
   })
 
   murphyCart.contents = [[1, 1], [2, 1], [3, 4]]
-
   await murphyCart.save()
 
   // find john, create him a cart and fill it:
@@ -59,8 +58,15 @@ async function seed() {
   })
 
   johnCart.contents = [[1, 2], [4, 2], [7, 1]]
-
   await johnCart.save()
+
+  // find frank, create him an empty cart:
+  const frank = await User.findOne({
+    where: {
+      email: 'frank@email.com'
+    }
+  })
+  await frank.createCart()
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
