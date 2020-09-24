@@ -45,36 +45,40 @@ class Cart extends Component {
         <h1>Cart</h1>
         {cart ? (
           <div className="CartContents">
-            {cart.map(item => (
-              <div key={item.id} className="CartItem">
-                {item.name}
-                <div className="CartItemEditDiv">
-                  <button
-                    type="button"
-                    onClick={() => this.handleDecrement(user.id, item.id)}
-                  >
-                    -
-                  </button>
-                  <div className="CartItemQty">{item.qty}</div>
-                  <button
-                    type="button"
-                    onClick={() => this.handleIncrement(user.id, item.id)}
-                  >
-                    +
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => this.handleDeleteItem(user.id, item.id)}
-                    className="CartRemoveItem"
-                  >
-                    &times;
-                  </button>
-                </div>
-              </div>
-            ))}
+            {cart.length
+              ? cart.map(item => (
+                  <div key={item.id} className="CartItem">
+                    {item.name}
+                    <div className="CartItemEditDiv">
+                      <button
+                        type="button"
+                        onClick={() => this.handleDecrement(user.id, item.id)}
+                        className="CartDecrement"
+                      >
+                        -
+                      </button>
+                      <div className="CartItemQty">{item.qty}</div>
+                      <button
+                        type="button"
+                        onClick={() => this.handleIncrement(user.id, item.id)}
+                        className="CartIncrement"
+                      >
+                        +
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => this.handleDeleteItem(user.id, item.id)}
+                        className="CartRemoveItem"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  </div>
+                ))
+              : 'no items in cart'}
           </div>
         ) : (
-          'no items in cart'
+          'this should never render -- may be able to remove conditional -- thoroughly check for errors if removed, may require some debugging to remove'
         )}
       </React.Fragment>
     )

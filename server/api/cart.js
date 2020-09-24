@@ -119,7 +119,7 @@ router.delete('/:userId/:productId/delete', async (req, res, next) => {
     )
 
     // conditional is just a safety net in case findIndex returns -1, but it never should:
-    if (itemIdx > 0) cart.contents.splice(itemIdx, 1)
+    if (itemIdx >= 0) cart.contents.splice(itemIdx, 1)
     cart.changed('contents', true)
     await cart.save()
 
