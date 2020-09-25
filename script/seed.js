@@ -4,65 +4,53 @@ const db = require('../server/db')
 const {User} = require('../server/db/models')
 const Cart = require('../server/db/models/cart')
 const Product = require('../server/db/models/product')
+const faker = require('faker')
 
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({email: 'murphy@email.com', password: '123', isAdmin: true}),
-    User.create({email: 'john@email.com', password: '123'}),
-    User.create({email: 'frank@email.com', password: '123'}),
-    Product.create({name: 'fruity pebbles', price: 1051}),
-    Product.create({name: 'cookie crunch', price: 725}),
-    Product.create({name: 'rice krispies', price: 295}),
-    Product.create({name: 'cheerios', price: 329}),
-    Product.create({name: 'frosted mini-wheats', price: 400}),
-    Product.create({name: 'frosted flakes', price: 299}),
-    Product.create({name: 'cocoa puffs', price: 299})
-  ])
-
-  // for seeding cart data:
-
-  // find murphy, create him a cart and fill it:
-  const murphy = await User.findOne({
-    where: {
-      email: 'murphy@email.com'
+  let users = []
+  for (let i = 0; i < 100; i++) {
+    const name = faker.name.firstName()
+    let newUser = {
+      email: faker.internet.email(name),
+      password: faker.internet.password()
     }
-  })
-  await murphy.createCart()
-  const murphyCart = await Cart.findOne({
-    where: {
-      userId: murphy.id
+
+    users.push(newUser)
+  }
+
+  let products = []
+  for (let j = 0; j < 100; j++) {
+    let cereal = {
+      name: faker.commerce.productName(),
+      description: faker.lorem.sentence(),
+      price: faker.random.number({max: 1000})
     }
+    products.push(cereal)
+  }
+
+  products.forEach(cereal => {
+    Product.create(cereal)
   })
 
-  murphyCart.contents = [[1, 1], [2, 1], [3, 4]]
-  await murphyCart.save()
-
-  // find john, create him a cart and fill it:
-  const john = await User.findOne({
-    where: {
-      email: 'john@email.com'
-    }
+  users.forEach(async (user, idx) => {
+    let person = await User.create(user)
+    await person.createCart()
+    const userCart = await Cart.findOne({
+      where: {
+        userId: idx + 1
+      }
+    })
+    userCart.contents = [
+      [Math.floor(Math.random() * 100 + 1), 1],
+      [Math.floor(Math.random() * 100 + 1), 1],
+      [Math.floor(Math.random() * 100 + 1), 1]
+    ]
+    userCart.changed('contents', true)
+    await userCart.save()
   })
-  await john.createCart()
-  const johnCart = await Cart.findOne({
-    where: {
-      userId: john.id
-    }
-  })
-
-  johnCart.contents = [[1, 2], [4, 2], [7, 1]]
-  await johnCart.save()
-
-  // find frank, create him an empty cart:
-  const frank = await User.findOne({
-    where: {
-      email: 'frank@email.com'
-    }
-  })
-  await frank.createCart()
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
@@ -80,7 +68,7 @@ async function runSeed() {
     process.exitCode = 1
   } finally {
     console.log('closing db connection')
-    await db.close()
+    // await db.close()
     console.log('db connection closed')
   }
 }
