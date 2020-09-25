@@ -29,11 +29,12 @@ class Cart extends Component {
   // BUG: cart items are shifting around when incrementing/decrementing!!!!
   async handleIncrement(userId, productId) {
     // for guest:
-    const guestCartItem = this.props.guestCart.find(
-      item => item.id === productId
-    )
-    if (!this.props.user.id) this.props.incrementGuest(guestCartItem)
-    else {
+    if (!this.props.user.id) {
+      const guestCartItem = this.props.guestCart.find(
+        item => item.id === productId
+      )
+      this.props.incrementGuest(guestCartItem)
+    } else {
       // for logged in user:
       await this.props.increment(userId, productId)
       await this.props.getCart(this.props.user.id)
@@ -41,16 +42,15 @@ class Cart extends Component {
   }
 
   async handleDecrement(userId, productId) {
-    // for guest
-    const guestCartItem = this.props.guestCart.find(
-      item => item.id === productId
-    )
-    if (!this.props.user.id && guestCartItem.qty > 1)
-      this.props.decrementGuest(guestCartItem)
-    if (!this.props.user.id && guestCartItem.qty <= 1)
-      this.props.deleteItemGuest(guestCartItem)
-    else {
-      // for logged in user: ----- BUG IN HERE
+    // for guest -- reconfigure conditional and move const into it!
+    if (!this.props.user.id) {
+      const guestCartItem = this.props.guestCart.find(
+        item => item.id === productId
+      )
+      if (guestCartItem.qty > 1) this.props.decrementGuest(guestCartItem)
+      if (guestCartItem.qty <= 1) this.props.deleteItemGuest(guestCartItem)
+    } else {
+      // for logged in user:
       const item = this.props.cart.find(item => item.id === productId)
       if (item.qty === 1) await this.props.deleteItem(userId, productId)
       else await this.props.decrement(userId, productId)
@@ -77,8 +77,6 @@ class Cart extends Component {
     let cart
     if (!user.id) cart = this.props.guestCart
     else cart = this.props.cart
-
-    console.log('guestCart on state in cart.js-->', this.props.guestCart)
 
     return (
       <React.Fragment>
