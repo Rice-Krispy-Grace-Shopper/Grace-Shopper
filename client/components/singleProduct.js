@@ -21,8 +21,6 @@ export class SingleProduct extends React.Component {
     const itemIdxInCart = this.props.cart.findIndex(
       item => item.id === productId
     )
-    // refactor this:
-    console.log(itemIdxInCart)
     if (itemIdxInCart === -1) await this.props.addToCart(userId, productId)
     await this.props.increment(userId, productId)
     this.props.history.push('/cart')

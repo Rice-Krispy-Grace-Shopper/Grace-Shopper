@@ -7,6 +7,11 @@ import {
   decrementItemQty,
   deleteFromCart
 } from '../store/cart'
+import {
+  incrementItemQtyGuest,
+  decrementItemQtyGuest,
+  deleteFromGuestCart
+} from '../store/cart-guest'
 
 class Cart extends Component {
   constructor(props) {
@@ -18,29 +23,62 @@ class Cart extends Component {
 
   async componentDidMount() {
     await this.props.getUser()
-    await this.props.getCart(this.props.user.id)
+    if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
   }
 
+  // BUG: cart items are shifting around when incrementing/decrementing!!!!
   async handleIncrement(userId, productId) {
-    await this.props.increment(userId, productId)
-    await this.props.getCart(this.props.user.id)
+    // for guest:
+    const guestCartItem = this.props.guestCart.find(
+      item => item.id === productId
+    )
+    if (!this.props.user.id) this.props.incrementGuest(guestCartItem)
+    else {
+      // for logged in user:
+      await this.props.increment(userId, productId)
+      await this.props.getCart(this.props.user.id)
+    }
   }
 
   async handleDecrement(userId, productId) {
-    const item = this.props.cart.find(item => item.id === productId)
-    if (item.qty === 1) await this.props.deleteItem(userId, productId)
-    else await this.props.decrement(userId, productId)
-    await this.props.getCart(this.props.user.id)
+    // for guest
+    const guestCartItem = this.props.guestCart.find(
+      item => item.id === productId
+    )
+    if (!this.props.user.id && guestCartItem.qty > 1)
+      this.props.decrementGuest(guestCartItem)
+    if (!this.props.user.id && guestCartItem.qty <= 1)
+      this.props.deleteItemGuest(guestCartItem)
+    else {
+      // for logged in user: ----- BUG IN HERE
+      const item = this.props.cart.find(item => item.id === productId)
+      if (item.qty === 1) await this.props.deleteItem(userId, productId)
+      else await this.props.decrement(userId, productId)
+      await this.props.getCart(this.props.user.id)
+    }
   }
 
   async handleDeleteItem(userId, productId) {
-    await this.props.deleteItem(userId, productId)
-    await this.props.getCart(this.props.user.id)
+    // for guest
+    const guestCartItem = this.props.guestCart.find(
+      item => item.id === productId
+    )
+    if (!this.props.user.id) this.props.deleteItemGuest(guestCartItem)
+    else {
+      // for logged in user:
+      await this.props.deleteItem(userId, productId)
+      await this.props.getCart(this.props.user.id)
+    }
   }
 
   render() {
-    const cart = this.props.cart
     const user = this.props.user
+
+    let cart
+    if (!user.id) cart = this.props.guestCart
+    else cart = this.props.cart
+
+    console.log('guestCart on state in cart.js-->', this.props.guestCart)
 
     return (
       <React.Fragment>
@@ -90,7 +128,8 @@ class Cart extends Component {
 
 const mapState = state => ({
   cart: state.cart.cart,
-  user: state.user
+  user: state.user,
+  guestCart: state.guestCart
 })
 
 const mapDispatch = dispatch => ({
@@ -100,7 +139,11 @@ const mapDispatch = dispatch => ({
     dispatch(incrementItemQty(userId, productId)),
   decrement: (userId, productId) =>
     dispatch(decrementItemQty(userId, productId)),
-  deleteItem: (userId, productId) => dispatch(deleteFromCart(userId, productId))
+  deleteItem: (userId, productId) =>
+    dispatch(deleteFromCart(userId, productId)),
+  incrementGuest: product => dispatch(incrementItemQtyGuest(product)),
+  decrementGuest: product => dispatch(decrementItemQtyGuest(product)),
+  deleteItemGuest: product => dispatch(deleteFromGuestCart(product))
 })
 
 export default connect(mapState, mapDispatch)(Cart)
