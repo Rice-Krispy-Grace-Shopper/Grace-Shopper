@@ -4,6 +4,7 @@ import {me} from '../store/user'
 import {gotProducts} from '../store/product'
 import {Link} from 'react-router-dom'
 import {getCart, incrementItemQty, addToCart} from '../store/cart'
+import {addToGuestCart, incrementItemQtyGuest} from '../store/cart-guest'
 
 export class AllProducts extends React.Component {
   constructor(props) {
@@ -14,21 +15,34 @@ export class AllProducts extends React.Component {
   async componentDidMount() {
     await this.props.getProducts()
     await this.props.getUser()
-    await this.props.getCart(this.props.user.id)
+    if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
   }
 
-  // this is working for items already in cart, need to write up backend to POST new item into cart if not already there
   async handleAddToCart(userId, productId) {
-    // check for item in cart (may help to make this a helper function in a utils file):
-    const itemIsInCart = this.props.cart.find(item => item.id === productId)
-    // refactor this:
-    if (itemIsInCart === undefined)
-      await this.props.addToCart(userId, productId)
-    await this.props.increment(userId, productId)
+    // for guest
+    if (!this.props.user.id) {
+      let itemIdxInCart = this.props.guestCart.findIndex(
+        item => item.id === productId
+      )
+      if (itemIdxInCart === -1) await this.props.addToGuestCart(productId)
+      itemIdxInCart = this.props.guestCart.findIndex(
+        item => item.id === productId
+      ) // re-assign after adding to cart
+      this.props.incrementGuest(this.props.guestCart[itemIdxInCart])
+    } else {
+      // for logged in user
+      const itemIdxInCart = this.props.cart.findIndex(
+        item => item.id === productId
+      )
+      if (itemIdxInCart === -1) await this.props.addToCart(userId, productId)
+      await this.props.increment(userId, productId)
+    }
     this.props.history.push('/cart')
   }
 
   render() {
+    console.log('Products state------->', this.props)
+
     const products = this.props.products
     const user = this.props.user
 
@@ -64,7 +78,8 @@ const mapState = state => {
   return {
     products: state.products.products,
     user: state.user,
-    cart: state.cart.cart
+    cart: state.cart.cart,
+    guestCart: state.guestCart
   }
 }
 
@@ -74,8 +89,10 @@ const mapDispatch = dispatch => {
     getCart: userId => dispatch(getCart(userId)),
     getProducts: () => dispatch(gotProducts()),
     addToCart: (userId, productId) => dispatch(addToCart(userId, productId)),
+    addToGuestCart: productId => dispatch(addToGuestCart(productId)),
     increment: (userId, productId) =>
-      dispatch(incrementItemQty(userId, productId))
+      dispatch(incrementItemQty(userId, productId)),
+    incrementGuest: product => dispatch(incrementItemQtyGuest(product))
   }
 }
 
