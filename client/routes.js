@@ -35,7 +35,7 @@ class Routes extends Component {
           <Route exact path="/products" component={allProducts} />
           <Route exact path="/cart" component={Cart} />
           <Route exact path="/products/:id" component={SingleProduct} />
-          <Route path="/checkout" component={Checkout} />
+          <Route exact path="/checkout" component={Checkout} />
           <Route
             exact
             path="/checkout-confirmation"
