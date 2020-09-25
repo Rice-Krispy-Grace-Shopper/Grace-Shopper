@@ -21,7 +21,6 @@ async function seed() {
     users.push(newUser)
   }
 
-
   let products = []
   for (let j = 0; j < 100; j++) {
     let cereal = {
