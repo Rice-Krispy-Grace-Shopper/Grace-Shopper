@@ -41,6 +41,8 @@ export class AllProducts extends React.Component {
   }
 
   render() {
+    console.log('Products state------->', this.props)
+
     const products = this.props.products
     const user = this.props.user
 

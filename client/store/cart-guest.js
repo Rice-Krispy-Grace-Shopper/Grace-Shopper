@@ -1,23 +1,23 @@
 import axios from 'axios'
 
 // ACTION TYPES
-const UPDATE_CART = 'UPDATE_CART'
-const ADD_TO_CART = 'ADD_TO_CART'
-const DELETE_ITEM = 'DELETE ITEM'
+const UPDATE_GUEST_CART = 'UPDATE_CART'
+const ADD_TO_GUEST_CART = 'ADD_TO_CART'
+const DELETE_GUEST_ITEM = 'DELETE ITEM'
 
 // ACTION CREATORS
 const updatedCart = product => ({
-  type: UPDATE_CART,
+  type: UPDATE_GUEST_CART,
   product
 })
 
 const addedToCart = product => ({
-  type: ADD_TO_CART,
+  type: ADD_TO_GUEST_CART,
   product
 })
 
 const deletedFromCart = product => ({
-  type: DELETE_ITEM,
+  type: DELETE_GUEST_ITEM,
   product
 })
 
@@ -55,16 +55,18 @@ const cart = []
 // REDUCER
 export default function(state = cart, action) {
   switch (action.type) {
-    case UPDATE_CART:
+    case UPDATE_GUEST_CART:
       // remove previous item on state and add it back with qty incremented/decremented:
-      return [
-        ...state.filter(item => item.id !== action.product.id),
-        action.product
-      ]
-    case ADD_TO_CART:
+      return state.map(item => {
+        if (item.id !== action.product.id) return item
+        else {
+          return action.product
+        }
+      })
+    case ADD_TO_GUEST_CART:
       return [...state, action.product]
-    case DELETE_ITEM:
-      return [...state.filter(item => item.id !== action.product.id)]
+    case DELETE_GUEST_ITEM:
+      return state.filter(item => item.id !== action.product.id)
     default:
       return state
   }

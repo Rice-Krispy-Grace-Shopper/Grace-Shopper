@@ -60,11 +60,12 @@ class Cart extends Component {
 
   async handleDeleteItem(userId, productId) {
     // for guest
-    const guestCartItem = this.props.guestCart.find(
-      item => item.id === productId
-    )
-    if (!this.props.user.id) this.props.deleteItemGuest(guestCartItem)
-    else {
+    if (!this.props.user.id) {
+      const guestCartItem = this.props.guestCart.find(
+        item => item.id === productId
+      )
+      this.props.deleteItemGuest(guestCartItem)
+    } else {
       // for logged in user:
       await this.props.deleteItem(userId, productId)
       await this.props.getCart(this.props.user.id)
@@ -72,6 +73,8 @@ class Cart extends Component {
   }
 
   render() {
+    console.log('Cart state------->', this.props)
+
     const user = this.props.user
 
     let cart
