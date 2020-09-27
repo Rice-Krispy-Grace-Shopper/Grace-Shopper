@@ -57,7 +57,8 @@ export class AllProducts extends React.Component {
                   <Link to={`/products/${product.id}`}>
                     <h2>{product.name}</h2>
                   </Link>
-                  <h4>${(product.price / 100).toFixed(2)}</h4>
+                  <h4>Price: ${(product.price / 100).toFixed(2)}</h4>
+                  <h4>Description: {product.description}</h4>
                   <button
                     type="button"
                     onClick={() => this.handleAddToCart(user.id, product.id)}
