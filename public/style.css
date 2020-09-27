@@ -197,6 +197,14 @@ fieldset {
   margin-bottom: 1em;
 }
 
+.CheckoutReviewItems {
+  border-bottom: 1px solid #969696;
+}
+
+.CheckoutReviewItems > * {
+  margin-left: 1em;
+}
+
 .CheckoutSubmitBtn {
   /* display: block; */
   /* width: 50px; */

@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import user from '../store/user'
 
-export default class Checkout extends Component {
+class Checkout extends Component {
   constructor() {
     super()
     this.state = {
@@ -18,8 +20,39 @@ export default class Checkout extends Component {
     event.preventDefault()
   }
   render() {
+    console.log('state in checkout-->', this.props)
+
+    // non-unique IDs are making browser complain
+    // local state management for form inputs needs attention
     return (
       <React.Fragment>
+        <div className="CheckoutReviewItems">
+          <h3>Review Items</h3>
+          {/* currently relying the fact that carts are on state because you have to click into checkout page from the cart -- but this means that you cannot refresh the browser while checking out -- fix later */}
+          {this.props.user.id ? (
+            <div>
+              {/* for logged in user: */}
+              {this.props.cart.map(item => (
+                <div key={item.id}>
+                  <p>
+                    ({item.qty}) {item.name} ... ${(item.price / 100).toFixed(
+                      2
+                    )}{' '}
+                    each
+                  </p>
+                </div>
+              ))}
+              <p>
+                <strong>Total:</strong> ${(this.props.subtotal / 100).toFixed(
+                  2
+                )}
+              </p>
+            </div>
+          ) : (
+            // for guest:
+            'guest items'
+          )}
+        </div>
         <div className="leftsidecart CheckoutForm">
           <div className="paymentDIV">
             <form>
@@ -168,3 +201,12 @@ export default class Checkout extends Component {
     )
   }
 }
+
+const mapState = state => ({
+  cart: state.cart.cart,
+  subtotal: state.cart.subtotal,
+  user: state.user,
+  guestCart: state.guestCart
+})
+
+export default connect(mapState)(Checkout)
