@@ -20,17 +20,15 @@ class Checkout extends Component {
     event.preventDefault()
   }
   render() {
-    console.log('state in checkout-->', this.props)
-
     // non-unique IDs are making browser complain
     // local state management for form inputs needs attention
     return (
       <React.Fragment>
-        <div className="CheckoutReviewItems">
+        <div className="CheckoutReviewItemsDiv">
           <h3>Review Items</h3>
-          {/* currently relying the fact that carts are on state because you have to click into checkout page from the cart -- but this means that you cannot refresh the browser while checking out -- fix later */}
+          {/* currently relying the fact that carts are on state because you always have to click into checkout page from the cart -- but this means that you cannot refresh the browser while checking out -- fix later */}
           {this.props.user.id ? (
-            <div>
+            <div className="CheckoutReviewItems">
               {/* for logged in user: */}
               {this.props.cart.map(item => (
                 <div key={item.id}>
@@ -49,8 +47,27 @@ class Checkout extends Component {
               </p>
             </div>
           ) : (
-            // for guest:
-            'guest items'
+            <div className="CheckoutReviewItems">
+              {/* for guest: */}
+              {this.props.guestCart.map(item => (
+                <div key={item.id}>
+                  <p>
+                    ({item.qty}) {item.name} ... ${(item.price / 100).toFixed(
+                      2
+                    )}{' '}
+                    each
+                  </p>
+                </div>
+              ))}
+              <p>
+                <strong>Total:</strong> ${(
+                  this.props.guestCart.reduce((subtotal, item) => {
+                    subtotal += item.price * item.qty
+                    return subtotal
+                  }, 0) / 100
+                ).toFixed(2)}
+              </p>
+            </div>
           )}
         </div>
         <div className="leftsidecart CheckoutForm">

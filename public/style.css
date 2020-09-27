@@ -201,8 +201,12 @@ fieldset {
   border-bottom: 1px solid #969696;
 }
 
+.CheckoutReviewItemsDiv > h3 {
+  margin: 1em 0 1.5em 1em;
+}
+
 .CheckoutReviewItems > * {
-  margin-left: 1em;
+  margin: 0 0 2em 1em;
 }
 
 .CheckoutSubmitBtn {
