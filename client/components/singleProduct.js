@@ -49,8 +49,12 @@ export class SingleProduct extends React.Component {
         <div>
           <h2>{product.name}</h2>
           <img src={product.imageUrl} width="200" height="200" />
-          <h4>Price: ${(product.price / 100).toFixed(2)}</h4>
-          <h4>Description: {product.description}</h4>
+          <p>
+            <strong>Price:</strong> ${(product.price / 100).toFixed(2)}
+          </p>
+          <p>
+            <strong>Description:</strong> {product.description}
+          </p>
           <button
             type="button"
             onClick={() => this.handleAddToCart(user.id, product.id)}

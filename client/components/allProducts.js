@@ -50,17 +50,26 @@ export class AllProducts extends React.Component {
           {products.map(product => {
             return (
               <div key={product.id} className="AllProductsSingleDiv">
-                <div className="AllProductsSingleImage">
+                <div>
                   <Link to={`/products/${product.id}`}>
-                    <img src={product.imageUrl} width="150" height="150" />
+                    <img
+                      src={product.imageUrl}
+                      width="150"
+                      height="150"
+                      className="AllProductsSingleImage"
+                    />
                   </Link>
                 </div>
                 <div className="AllProductsSingleContent">
                   <Link to={`/products/${product.id}`}>
-                    <h2 className="AllProductsSingleName">{product.name}</h2>
+                    <h3 className="AllProductsSingleName">{product.name}</h3>
                   </Link>
-                  <h4>Price: ${(product.price / 100).toFixed(2)}</h4>
-                  <h4>Description: {product.description}</h4>
+                  <p>
+                    <strong>Price:</strong> ${(product.price / 100).toFixed(2)}
+                  </p>
+                  <p>
+                    <strong>Description:</strong> {product.description}
+                  </p>
                   <button
                     type="button"
                     onClick={() => this.handleAddToCart(user.id, product.id)}

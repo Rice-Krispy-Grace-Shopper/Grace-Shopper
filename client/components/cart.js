@@ -91,8 +91,8 @@ class Cart extends Component {
                       <Link to={`/products/${item.id}`}>
                         <img
                           src={item.imageUrl}
-                          width="150"
-                          height="150"
+                          width="100"
+                          height="100"
                           className="AllProductsSingleImage"
                         />
                       </Link>
@@ -101,8 +101,12 @@ class Cart extends Component {
                       <Link to={`/products/${item.id}`}>
                         <h3 className="AllProductsSingleName">{item.name}</h3>
                       </Link>
-                      <h4>Price: ${(item.price / 100).toFixed(2)}</h4>
-                      <h4>Description: {item.description}</h4>
+                      <p>
+                        <strong>Price:</strong> ${(item.price / 100).toFixed(2)}
+                      </p>
+                      <p>
+                        <strong>Description:</strong> {item.description}
+                      </p>
                     </div>
                     <div className="CartItemEditDiv">
                       <button
