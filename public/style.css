@@ -20,6 +20,15 @@ form div {
   display: inline-block;
 }
 
+/* NAVBAR ================================================== */
+
+.NavBarDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* CART ==================================================== */
+
 .CartItem {
   display: flex;
   justify-content: space-between;

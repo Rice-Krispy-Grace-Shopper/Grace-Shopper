@@ -27,7 +27,6 @@ class Routes extends Component {
 
     return (
       <React.Fragment>
-        <Route exact path="/" component={allProducts} />
         <Switch>
           {/* Routes placed here are available to all visitors */}
           <Route exact path="/login" component={Login} />

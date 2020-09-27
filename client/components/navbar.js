@@ -9,23 +9,30 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     <h1>Grace Shopper</h1>
     <nav>
       {isLoggedIn ? (
-        <div>
+        <div className="NavBarDiv">
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
+          <div className="NavBarLeft">
+            <Link to="/home">Home</Link>
+            <Link to="/products">Shop</Link>
+            <Link to="/cart">Cart</Link>
+          </div>
+          <div className="NavBarRight">
+            <a href="#" onClick={handleClick}>
+              Logout
+            </a>
+          </div>
         </div>
       ) : (
-        <div>
+        <div className="NavBarDiv">
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
+          <div className="NavBarLeft">
+            <Link to="/products">Shop</Link>
+            <Link to="/cart">Cart</Link>
+          </div>
+          <div className="NavBarRight">
+            <Link to="/login">Login</Link>
+            <Link to="/signup">Sign Up</Link>
+          </div>
         </div>
       )}
     </nav>
