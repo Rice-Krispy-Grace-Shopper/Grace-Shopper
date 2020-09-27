@@ -101,10 +101,9 @@ export default function(state = cart, action) {
     case GET_SUBTOTAL:
       return {
         ...state,
-        subtotal: state.cart.reduce((accum, item) => {
-          console.log('accum-->', accum)
-          accum += item.price
-          return accum
+        subtotal: state.cart.reduce((subtotal, item) => {
+          subtotal += item.price * item.qty
+          return subtotal
         }, 0)
       }
     default:

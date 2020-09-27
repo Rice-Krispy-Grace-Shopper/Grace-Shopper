@@ -43,6 +43,7 @@ class Cart extends Component {
       // for logged in user:
       await this.props.increment(userId, productId)
       await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
     }
   }
 
@@ -60,6 +61,7 @@ class Cart extends Component {
       if (item.qty === 1) await this.props.deleteItem(userId, productId)
       else await this.props.decrement(userId, productId)
       await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
     }
   }
 
@@ -74,6 +76,7 @@ class Cart extends Component {
       // for logged in user:
       await this.props.deleteItem(userId, productId)
       await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
     }
   }
 
