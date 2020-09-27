@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 
 export default class Checkout extends Component {
   constructor() {
@@ -155,11 +156,14 @@ export default class Checkout extends Component {
             </fieldset>
           </div>
         </div>
-        {/* Submit button is an input field, leaving in as comment in case this is for good reason: */}
+        {/* leaving in existing submit as comment: */}
         {/* <input className="input-adjust" type="submit" value="Submit" /> */}
-        <button type="submit" className="CheckoutSubmitBtn">
-          Submit
-        </button>
+
+        {/* temporarily making Submit Order button a Link */}
+        {/* should be refactored to a button and then handleSubmit will perform a history.push("/checkout-confirmation") */}
+        <Link to="/checkout-confirmation" className="CheckoutSubmitBtn">
+          Submit Order
+        </Link>
       </React.Fragment>
     )
   }
