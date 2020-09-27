@@ -1,12 +1,17 @@
 const router = require('express').Router()
-const {Op} = require('sequelize')
-const {Cart, Product} = require('../db/models')
+const {Order} = require('../db/models')
 module.exports = router
 
-// POST /api/order
-router.post('/', async (req, res, next) => {
+// POST /api/order/:userId
+router.post('/:userId', async (req, res, next) => {
   try {
-    res.json('testing order route')
+    // req.body shape --> [ [ 1, 4, 299 ], [ 12, 2, 1999 ] ]
+    const order = await Order.create({
+      contents: req.body,
+      userId: req.params.userId
+    })
+    // temp:
+    res.json(order)
   } catch (error) {
     next(error)
   }
