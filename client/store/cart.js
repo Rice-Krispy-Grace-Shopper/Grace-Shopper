@@ -5,6 +5,7 @@ const GET_CART = 'GET_CART'
 const UPDATE_CART = 'UPDATE_CART'
 const ADD_TO_CART = 'ADD_TO_CART'
 const DELETE_ITEM = 'DELETE ITEM'
+const GET_SUBTOTAL = 'GET_SUBTOTAL'
 
 // ACTION CREATORS
 const gotCart = cart => ({
@@ -22,6 +23,10 @@ const addedToCart = () => ({
 
 const deletedFromCart = () => ({
   type: DELETE_ITEM
+})
+
+export const getSubtotal = () => ({
+  type: GET_SUBTOTAL
 })
 
 // THUNK CREATORS
@@ -92,6 +97,15 @@ export default function(state = cart, action) {
     case DELETE_ITEM:
       return {
         ...state
+      }
+    case GET_SUBTOTAL:
+      return {
+        ...state,
+        subtotal: state.cart.reduce((accum, item) => {
+          console.log('accum-->', accum)
+          accum += item.price
+          return accum
+        }, 0)
       }
     default:
       return state

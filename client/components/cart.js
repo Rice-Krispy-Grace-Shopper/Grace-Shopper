@@ -6,7 +6,8 @@ import {
   getCart,
   incrementItemQty,
   decrementItemQty,
-  deleteFromCart
+  deleteFromCart,
+  getSubtotal
 } from '../store/cart'
 import {
   incrementItemQtyGuest,
@@ -24,7 +25,11 @@ class Cart extends Component {
 
   async componentDidMount() {
     await this.props.getUser()
-    if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
+    // for logged in user
+    if (this.props.user.id) {
+      await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
+    }
   }
 
   async handleIncrement(userId, productId) {
@@ -136,9 +141,12 @@ class Cart extends Component {
                     </div>
                   </div>
                 ))}
+                {/* CHECKOUT SECTION */}
                 <div className="CartCheckoutSection">
                   <p className="CartSubtotal">
-                    <strong>Subtotal:</strong> ${}
+                    <strong>Subtotal:</strong> ${(
+                      this.props.subtotal / 100
+                    ).toFixed(2)}
                   </p>
                   <button type="button" className="CartCheckoutBtn">
                     Checkout
@@ -150,7 +158,7 @@ class Cart extends Component {
             )}
           </div>
         ) : (
-          // this is for when no user is logged in if not cart exists at all, remove once guest features are added:
+          // this is for when no user is logged in if not cart exists at all
           'no items in cart'
         )}
       </React.Fragment>
@@ -160,6 +168,7 @@ class Cart extends Component {
 
 const mapState = state => ({
   cart: state.cart.cart,
+  subtotal: state.cart.subtotal,
   user: state.user,
   guestCart: state.guestCart
 })
@@ -175,7 +184,8 @@ const mapDispatch = dispatch => ({
     dispatch(deleteFromCart(userId, productId)),
   incrementGuest: product => dispatch(incrementItemQtyGuest(product)),
   decrementGuest: product => dispatch(decrementItemQtyGuest(product)),
-  deleteItemGuest: product => dispatch(deleteItemGuestCart(product))
+  deleteItemGuest: product => dispatch(deleteItemGuestCart(product)),
+  getSubtotal: () => dispatch(getSubtotal())
 })
 
 export default connect(mapState, mapDispatch)(Cart)
