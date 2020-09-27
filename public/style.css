@@ -20,6 +20,17 @@ form div {
   display: inline-block;
 }
 
+/* LOGIN / SIGNUP ========================================== */
+
+.LoginSignupBtn {
+  /* border: none;
+	border-radius: 5px;
+	color: #fff;
+	background-color: #a8a8a8;
+	padding: 0.6em 1.2em;
+	font-size: 0.9rem; */
+}
+
 /* NAVBAR ================================================== */
 
 .NavBarDiv {
