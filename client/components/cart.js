@@ -81,8 +81,6 @@ class Cart extends Component {
   }
 
   render() {
-    console.log('state in cart-->', this.props)
-
     const user = this.props.user
 
     let cart
@@ -147,9 +145,15 @@ class Cart extends Component {
                 {/* CHECKOUT SECTION */}
                 <div className="CartCheckoutSection">
                   <p className="CartSubtotal">
+                    {/* first subtotal for logged in / second for guest */}
                     <strong>Subtotal:</strong> ${user.id
                       ? (this.props.subtotal / 100).toFixed(2)
-                      : 'guest subtotal'}
+                      : (
+                          cart.reduce((subtotal, item) => {
+                            subtotal += item.price * item.qty
+                            return subtotal
+                          }, 0) / 100
+                        ).toFixed(2)}
                   </p>
                   <button type="button" className="CartCheckoutBtn">
                     Checkout
@@ -157,12 +161,22 @@ class Cart extends Component {
                 </div>
               </React.Fragment>
             ) : (
-              'Your Cart Is Empty'
+              <div className="CartEmptyMsg">
+                <p>Your Cart Is Empty!</p>
+                <p>
+                  Checkout the <Link to="/products">Shop</Link> to add products.
+                </p>
+              </div>
             )}
           </div>
         ) : (
           // this is for when no user is logged in if not cart exists at all
-          'Your Cart Is Empty'
+          <div className="CartEmptyMsg">
+            <p>Your Cart Is Empty!</p>
+            <p>
+              Checkout the <Link to="/products">Shop</Link> to add products.
+            </p>
+          </div>
         )}
       </React.Fragment>
     )
