@@ -27,7 +27,6 @@ class Cart extends Component {
     if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
   }
 
-  // BUG: cart items are shifting around when incrementing/decrementing!!!!
   async handleIncrement(userId, productId) {
     // for guest:
     if (!this.props.user.id) {
@@ -43,7 +42,7 @@ class Cart extends Component {
   }
 
   async handleDecrement(userId, productId) {
-    // for guest -- reconfigure conditional and move const into it!
+    // for guest
     if (!this.props.user.id) {
       const guestCartItem = this.props.guestCart.find(
         item => item.id === productId
@@ -74,6 +73,8 @@ class Cart extends Component {
   }
 
   render() {
+    console.log('state in cart-->', this.props)
+
     const user = this.props.user
 
     let cart
@@ -84,8 +85,9 @@ class Cart extends Component {
       <React.Fragment>
         {cart ? (
           <div className="CartContents">
-            {cart.length
-              ? cart.map(item => (
+            {cart.length ? (
+              <React.Fragment>
+                {cart.map(item => (
                   <div key={item.id} className="CartItem">
                     <div>
                       <Link to={`/products/${item.id}`}>
@@ -133,8 +135,19 @@ class Cart extends Component {
                       </button>
                     </div>
                   </div>
-                ))
-              : 'no items in cart'}
+                ))}
+                <div className="CartCheckoutSection">
+                  <p className="CartSubtotal">
+                    <strong>Subtotal:</strong> ${}
+                  </p>
+                  <button type="button" className="CartCheckoutBtn">
+                    Checkout
+                  </button>
+                </div>
+              </React.Fragment>
+            ) : (
+              'no items in cart'
+            )}
           </div>
         ) : (
           // this is for when no user is logged in if not cart exists at all, remove once guest features are added:

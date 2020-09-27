@@ -139,3 +139,20 @@ form div {
 .CartRemoveItem:hover {
   background-color: #de3e3e;
 }
+
+.CartCheckoutSection {
+  text-align: center;
+}
+
+.CartCheckoutBtn {
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #685dfc;
+  padding: 0.6em 1.2em;
+}
+
+.CartCheckoutBtn:hover,
+.CartCheckoutBtn:focus {
+  background-color: #594fdb;
+}
