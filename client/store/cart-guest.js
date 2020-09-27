@@ -17,7 +17,7 @@ const addedToCart = product => ({
   product
 })
 
-const deletedFromCart = product => ({
+export const deleteItemGuestCart = product => ({
   type: DELETE_GUEST_ITEM,
   product
 })
@@ -27,14 +27,14 @@ export const removedGuestCart = () => ({
 })
 
 // THUNK CREATORS
+// unnecessary thunk creator, refactor to action creator
 export const incrementItemQtyGuest = product => dispatch => {
-  // refactor
   product.qty++
   dispatch(updatedCart(product))
 }
 
+// unnecessary thunk creator, refactor to action creator
 export const decrementItemQtyGuest = product => dispatch => {
-  // refactor
   product.qty--
   dispatch(updatedCart(product))
 }
@@ -47,11 +47,6 @@ export const addToGuestCart = productId => async dispatch => {
   } catch (error) {
     console.error(error)
   }
-}
-
-// unnecessary thunk, can refactor to export action creator later:
-export const deleteFromGuestCart = product => dispatch => {
-  dispatch(deletedFromCart(product))
 }
 
 // INITIAL STATE

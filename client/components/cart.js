@@ -10,7 +10,7 @@ import {
 import {
   incrementItemQtyGuest,
   decrementItemQtyGuest,
-  deleteFromGuestCart
+  deleteItemGuestCart
 } from '../store/cart-guest'
 
 class Cart extends Component {
@@ -144,7 +144,7 @@ const mapDispatch = dispatch => ({
     dispatch(deleteFromCart(userId, productId)),
   incrementGuest: product => dispatch(incrementItemQtyGuest(product)),
   decrementGuest: product => dispatch(decrementItemQtyGuest(product)),
-  deleteItemGuest: product => dispatch(deleteFromGuestCart(product))
+  deleteItemGuest: product => dispatch(deleteItemGuestCart(product))
 })
 
 export default connect(mapState, mapDispatch)(Cart)
