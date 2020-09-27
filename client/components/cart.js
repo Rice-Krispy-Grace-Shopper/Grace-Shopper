@@ -73,8 +73,6 @@ class Cart extends Component {
   }
 
   render() {
-    console.log('Cart state------->', this.props)
-
     const user = this.props.user
 
     let cart

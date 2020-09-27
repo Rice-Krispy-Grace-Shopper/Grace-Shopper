@@ -1,20 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <h1>Grace Shopper</h1>
+    <h1 className="Logo">Grace Shopper</h1>
     <nav>
       {isLoggedIn ? (
         <div className="NavBarDiv">
           {/* The navbar will show these links after you log in */}
           <div className="NavBarLeft">
-            <Link to="/home">Home</Link>
-            <Link to="/products">Shop</Link>
-            <Link to="/cart">Cart</Link>
+            <NavLink to="/home" activeClassName="NavActive">
+              Home
+            </NavLink>
+            <NavLink to="/products" activeClassName="NavActive">
+              Shop
+            </NavLink>
+            <NavLink to="/cart" activeClassName="NavActive">
+              Cart
+            </NavLink>
           </div>
           <div className="NavBarRight">
             <a href="#" onClick={handleClick}>
@@ -26,12 +32,20 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         <div className="NavBarDiv">
           {/* The navbar will show these links before you log in */}
           <div className="NavBarLeft">
-            <Link to="/products">Shop</Link>
-            <Link to="/cart">Cart</Link>
+            <NavLink to="/products" activeClassName="NavActive">
+              Shop
+            </NavLink>
+            <NavLink to="/cart" activeClassName="NavActive">
+              Cart
+            </NavLink>
           </div>
           <div className="NavBarRight">
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Sign Up</Link>
+            <NavLink to="/login" activeClassName="NavActive">
+              Login
+            </NavLink>
+            <NavLink to="/signup" activeClassName="NavActive">
+              Sign Up
+            </NavLink>
           </div>
         </div>
       )}
