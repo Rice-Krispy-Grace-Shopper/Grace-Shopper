@@ -147,9 +147,9 @@ class Cart extends Component {
                 {/* CHECKOUT SECTION */}
                 <div className="CartCheckoutSection">
                   <p className="CartSubtotal">
-                    <strong>Subtotal:</strong> ${(
-                      this.props.subtotal / 100
-                    ).toFixed(2)}
+                    <strong>Subtotal:</strong> ${user.id
+                      ? (this.props.subtotal / 100).toFixed(2)
+                      : 'guest subtotal'}
                   </p>
                   <button type="button" className="CartCheckoutBtn">
                     Checkout
@@ -157,12 +157,12 @@ class Cart extends Component {
                 </div>
               </React.Fragment>
             ) : (
-              'no items in cart'
+              'Your Cart Is Empty'
             )}
           </div>
         ) : (
           // this is for when no user is logged in if not cart exists at all
-          'no items in cart'
+          'Your Cart Is Empty'
         )}
       </React.Fragment>
     )
