@@ -9,9 +9,14 @@ const submittedOrder = () => ({
 })
 
 // THUNK CREATORS
-export const submitOrder = userId => async dispatch => {
+export const submitOrder = (userId, cart) => async dispatch => {
   try {
-    const {data: order} = await axios.post(`/api/order/${userId}`)
+    let orderData = []
+    cart.forEach(item => {
+      let orderItem = [item.id, item.qty, item.price]
+      orderData.push(orderItem)
+    })
+    await axios.post(`/api/order/${userId}`, orderData)
     dispatch(submittedOrder())
   } catch (error) {
     console.error(error)
@@ -25,7 +30,7 @@ const order = []
 export default function(state = order, action) {
   switch (action.type) {
     case SUBMIT_ORDER:
-      return []
+      return state
     default:
       return state
   }

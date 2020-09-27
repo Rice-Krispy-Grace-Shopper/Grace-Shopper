@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import {submitOrder} from '../store/order'
 
 class Checkout extends Component {
   constructor() {
@@ -8,17 +9,26 @@ class Checkout extends Component {
     this.state = {
       paymentInfo: ''
     }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
 
-  handleSubmit(event) {
-    event.preventDefault()
+  async handleSubmit(userId, cart) {
+    // event.preventDefault();
+    await this.props.submitOrder(userId, cart)
+    this.props.history.push('/checkout-confirmation')
   }
+
   render() {
+    console.log('state in checkout-->', this.props)
+
     // non-unique IDs are making browser complain
     // local state management for form inputs needs attention
     return (
@@ -205,14 +215,17 @@ class Checkout extends Component {
             </fieldset>
           </div>
         </div>
-        {/* leaving in existing submit as comment: */}
+        {/* leaving in existing submit "button" as comment: */}
         {/* <input className="input-adjust" type="submit" value="Submit" /> */}
 
-        {/* temporarily making Submit Order button a Link */}
-        {/* should be refactored to a button and then handleSubmit will perform a history.push("/checkout-confirmation") */}
-        <Link to="/checkout-confirmation" className="CheckoutSubmitBtn">
+        {/* may want to refactor to button type submit once forms are ready to go */}
+        <button
+          type="button"
+          onClick={() => this.handleSubmit(this.props.user.id, this.props.cart)}
+          className="CheckoutSubmitBtn"
+        >
           Submit Order
-        </Link>
+        </button>
       </React.Fragment>
     )
   }
@@ -225,4 +238,8 @@ const mapState = state => ({
   guestCart: state.guestCart
 })
 
-export default connect(mapState)(Checkout)
+const mapDispatch = dispatch => ({
+  submitOrder: (userId, cart) => dispatch(submitOrder(userId, cart))
+})
+
+export default connect(mapState, mapDispatch)(Checkout)

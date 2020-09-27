@@ -10,7 +10,6 @@ router.post('/:userId', async (req, res, next) => {
       contents: req.body,
       userId: req.params.userId
     })
-    // temp:
     res.json(order)
   } catch (error) {
     next(error)
