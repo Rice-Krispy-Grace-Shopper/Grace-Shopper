@@ -61,6 +61,7 @@ export class AllProducts extends React.Component {
                   <button
                     type="button"
                     onClick={() => this.handleAddToCart(user.id, product.id)}
+                    className="AddToCartBtn"
                   >
                     Add to Cart
                   </button>

@@ -46,7 +46,20 @@ form div {
 }
 
 .AllProductsSingleImage {
-  margin-right: 1.5em;
+  margin: 0 1.5em;
+}
+
+.AddToCartBtn {
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #685dfc;
+  padding: 0.6em 1.2em;
+}
+
+.AddToCartBtn:hover,
+.AddToCartBtn:focus {
+  background-color: #594fdb;
 }
 
 /* CART ==================================================== */
