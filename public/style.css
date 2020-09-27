@@ -156,6 +156,10 @@ button {
   margin-top: 2em;
 }
 
+.CartSubtotal {
+  margin-bottom: 2em;
+}
+
 .CartCheckoutBtn {
   border: none;
   border-radius: 5px;
@@ -169,4 +173,33 @@ button {
   background-color: #594fdb;
 }
 
-/* ==================================================== */
+/* CHECKOUT PAGE ========================================= */
+
+.CheckoutForm {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+fieldset {
+  border: none;
+}
+
+.input-adjust {
+  margin-bottom: 1em;
+}
+
+.CheckoutSubmitBtn {
+  display: block;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #685dfc;
+  padding: 0.6em 1.2em;
+  margin: 0 auto;
+}
+
+.CheckoutSubmitBtn:hover,
+.CheckoutSubmitBtn:focus {
+  background-color: #594fdb;
+}

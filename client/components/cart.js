@@ -155,9 +155,9 @@ class Cart extends Component {
                           }, 0) / 100
                         ).toFixed(2)}
                   </p>
-                  <button type="button" className="CartCheckoutBtn">
+                  <Link to="/checkout" className="CartCheckoutBtn">
                     Checkout
-                  </button>
+                  </Link>
                 </div>
               </React.Fragment>
             ) : (
