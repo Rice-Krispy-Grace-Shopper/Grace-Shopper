@@ -145,7 +145,7 @@ class Cart extends Component {
                 {/* CHECKOUT SECTION */}
                 <div className="CartCheckoutSection">
                   <p className="CartSubtotal">
-                    {/* first subtotal for logged in / second for guest */}
+                    {/* if user's logged in: subtotal for user, else, subtotal for guest */}
                     <strong>Subtotal:</strong> ${user.id
                       ? (this.props.subtotal / 100).toFixed(2)
                       : (

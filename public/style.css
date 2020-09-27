@@ -20,6 +20,10 @@ form div {
   display: inline-block;
 }
 
+button {
+  font-family: inherit;
+}
+
 /* LOGIN / SIGNUP ========================================== */
 
 .LoginSignupBtn {
@@ -140,8 +144,16 @@ form div {
   background-color: #de3e3e;
 }
 
+.CartEmptyMsg {
+  margin-top: 3em;
+  text-align: center;
+}
+
+/* CART CHECKOUT SECTION */
+
 .CartCheckoutSection {
   text-align: center;
+  margin-top: 2em;
 }
 
 .CartCheckoutBtn {
@@ -157,6 +169,4 @@ form div {
   background-color: #594fdb;
 }
 
-.CartEmptyMsg {
-  text-align: center;
-}
+/* ==================================================== */
