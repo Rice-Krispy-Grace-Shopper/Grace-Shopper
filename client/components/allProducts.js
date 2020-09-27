@@ -51,11 +51,13 @@ export class AllProducts extends React.Component {
             return (
               <div key={product.id} className="AllProductsSingleDiv">
                 <div className="AllProductsSingleImage">
-                  <img src={product.imageUrl} width="150" height="150" />
+                  <Link to={`/products/${product.id}`}>
+                    <img src={product.imageUrl} width="150" height="150" />
+                  </Link>
                 </div>
                 <div className="AllProductsSingleContent">
                   <Link to={`/products/${product.id}`}>
-                    <h2>{product.name}</h2>
+                    <h2 className="AllProductsSingleName">{product.name}</h2>
                   </Link>
                   <h4>Price: ${(product.price / 100).toFixed(2)}</h4>
                   <h4>Description: {product.description}</h4>

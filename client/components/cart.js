@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {me} from '../store/user'
 import {
   getCart,
@@ -81,13 +82,28 @@ class Cart extends Component {
 
     return (
       <React.Fragment>
-        <h1>Cart</h1>
         {cart ? (
           <div className="CartContents">
             {cart.length
               ? cart.map(item => (
                   <div key={item.id} className="CartItem">
-                    {item.name}
+                    <div>
+                      <Link to={`/products/${item.id}`}>
+                        <img
+                          src={item.imageUrl}
+                          width="150"
+                          height="150"
+                          className="AllProductsSingleImage"
+                        />
+                      </Link>
+                    </div>
+                    <div className="AllProductsSingleContent">
+                      <Link to={`/products/${item.id}`}>
+                        <h3 className="AllProductsSingleName">{item.name}</h3>
+                      </Link>
+                      <h4>Price: ${(item.price / 100).toFixed(2)}</h4>
+                      <h4>Description: {item.description}</h4>
+                    </div>
                     <div className="CartItemEditDiv">
                       <button
                         type="button"

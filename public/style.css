@@ -41,12 +41,21 @@ form div {
 
 .AllProductsSingleDiv {
   display: flex;
-  padding: 1.5em 0;
+  padding: 1.75em 0;
   border-bottom: 1px solid #969696;
 }
 
 .AllProductsSingleImage {
   margin: 0 1.5em;
+}
+
+.AllProductsSingleContent {
+  align-self: flex-start;
+  padding: 0;
+}
+
+.AllProductsSingleName {
+  margin: 0;
 }
 
 .AddToCartBtn {
@@ -67,20 +76,22 @@ form div {
 .CartItem {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2em;
+  padding: 1.5em 0;
+  border-bottom: 1px solid #969696;
 }
 
 .CartItemEditDiv {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
   width: 33%;
   margin-left: auto;
+  margin-right: 1em;
 }
 
 .CartItemQty {
-  margin: 0 1em;
+  margin: 0.75em 1em 0;
 }
 
 .CartIncrement,
