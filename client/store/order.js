@@ -32,7 +32,6 @@ export const submitOrder = (userId, cart) => async dispatch => {
 export const getOrders = userId => async dispatch => {
   try {
     const {data: orders} = await axios.get(`/api/order/${userId}`)
-    console.log('orders in thunk-->', orders)
     dispatch(gotOrders(orders))
   } catch (error) {
     console.error(error)
