@@ -14,6 +14,7 @@ export class AllProducts extends React.Component {
       activePage: 4
     }
     this.handleAddToCart = this.handleAddToCart.bind(this)
+    this.handlePageChange = this.handlePageChange(this)
   }
 
   async componentDidMount() {
@@ -54,6 +55,13 @@ export class AllProducts extends React.Component {
       else {
         return (
           <React.Fragment>
+            <Pagination
+              activePage={this.state.activePage}
+              itemsCountPerPage={25}
+              totalItemsCount={100}
+              pageRangeDisplayed={5}
+              onChange={this.handlePageChange()}
+            />
             {products.map(product => {
               return (
                 <div key={product.id} className="AllProductsSingleDiv">
