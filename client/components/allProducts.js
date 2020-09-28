@@ -10,7 +10,8 @@ export class AllProducts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loaded: false
+      loaded: false,
+      activePage: 4
     }
     this.handleAddToCart = this.handleAddToCart.bind(this)
   }
