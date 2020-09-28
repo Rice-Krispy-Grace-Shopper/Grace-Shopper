@@ -9,6 +9,9 @@ import {addToGuestCart, incrementItemQtyGuest} from '../store/cart-guest'
 export class AllProducts extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      loaded: false
+    }
     this.handleAddToCart = this.handleAddToCart.bind(this)
   }
 
@@ -16,6 +19,7 @@ export class AllProducts extends React.Component {
     await this.props.getProducts()
     await this.props.getUser()
     if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
+    this.setState({loaded: true})
   }
 
   async handleAddToCart(userId, productId) {
@@ -45,44 +49,49 @@ export class AllProducts extends React.Component {
     const user = this.props.user
 
     if (products) {
-      return (
-        <React.Fragment>
-          {products.map(product => {
-            return (
-              <div key={product.id} className="AllProductsSingleDiv">
-                <div>
-                  <Link to={`/products/${product.id}`}>
-                    <img
-                      src={product.imageUrl}
-                      width="150"
-                      height="150"
-                      className="AllProductsSingleImage"
-                    />
-                  </Link>
+      if (!this.state.loaded) return <div>Products Are Loading</div>
+      else {
+        return (
+          <React.Fragment>
+            {products.map(product => {
+              return (
+                <div key={product.id} className="AllProductsSingleDiv">
+                  <div>
+                    <Link to={`/products/${product.id}`}>
+                      <img
+                        src={product.imageUrl}
+                        width="150"
+                        height="150"
+                        className="AllProductsSingleImage"
+                      />
+                    </Link>
+                  </div>
+                  <div className="AllProductsSingleContent">
+                    <Link to={`/products/${product.id}`}>
+                      <h3 className="AllProductsSingleName">{product.name}</h3>
+                    </Link>
+                    <p>
+                      <strong>Price:</strong> ${(product.price / 100).toFixed(
+                        2
+                      )}
+                    </p>
+                    <p>
+                      <strong>Description:</strong> {product.description}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => this.handleAddToCart(user.id, product.id)}
+                      className="AddToCartBtn"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-                <div className="AllProductsSingleContent">
-                  <Link to={`/products/${product.id}`}>
-                    <h3 className="AllProductsSingleName">{product.name}</h3>
-                  </Link>
-                  <p>
-                    <strong>Price:</strong> ${(product.price / 100).toFixed(2)}
-                  </p>
-                  <p>
-                    <strong>Description:</strong> {product.description}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => this.handleAddToCart(user.id, product.id)}
-                    className="AddToCartBtn"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            )
-          })}
-        </React.Fragment>
-      )
+              )
+            })}
+          </React.Fragment>
+        )
+      }
     } else {
       return 'No Products to Display!'
     }
