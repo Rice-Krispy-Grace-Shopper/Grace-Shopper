@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {submitOrder} from '../store/order'
 import {clearCart} from '../store/cart'
+import {removedGuestCart} from '../store/cart-guest'
 
 class Checkout extends Component {
   constructor() {
@@ -22,8 +23,14 @@ class Checkout extends Component {
 
   async handleSubmit(userId, cart) {
     // event.preventDefault();
-    await this.props.submitOrder(userId, cart)
-    await this.props.clearCart(userId)
+    // for logged in user:
+    if (this.props.user.id) {
+      await this.props.submitOrder(userId, cart)
+      await this.props.clearCart(userId)
+    } else {
+      // for guest
+      this.props.clearGuestCart()
+    }
     this.props.history.push('/checkout-confirmation')
   }
 
@@ -241,7 +248,8 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   submitOrder: (userId, cart) => dispatch(submitOrder(userId, cart)),
-  clearCart: userId => dispatch(clearCart(userId))
+  clearCart: userId => dispatch(clearCart(userId)),
+  clearGuestCart: () => dispatch(removedGuestCart())
 })
 
 export default connect(mapState, mapDispatch)(Checkout)
