@@ -10,7 +10,8 @@ import {
   Cart,
   SingleProduct,
   Checkout,
-  CheckoutConfirmation
+  CheckoutConfirmation,
+  OrderHistory
 } from './components'
 import {me} from './store'
 
@@ -44,6 +45,7 @@ class Routes extends Component {
             <Switch>
               {/* Routes placed here are only available after logging in */}
               <Route path="/home" component={UserHome} />
+              <Route path="/orders" component={OrderHistory} />
             </Switch>
           )}
           {/* Displays our Login component as a fallback */}
