@@ -128,3 +128,20 @@ router.delete('/:userId/:productId/delete', async (req, res, next) => {
     next(error)
   }
 })
+
+// DELETE /api/cart/:userId/
+router.delete('/:userId', async (req, res, next) => {
+  try {
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
+    })
+
+    cart.contents = []
+    cart.changed('contents', true)
+    await cart.save()
+
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})

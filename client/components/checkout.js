@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {submitOrder} from '../store/order'
+import {clearCart} from '../store/cart'
 
 class Checkout extends Component {
   constructor() {
@@ -23,6 +23,7 @@ class Checkout extends Component {
   async handleSubmit(userId, cart) {
     // event.preventDefault();
     await this.props.submitOrder(userId, cart)
+    await this.props.clearCart(userId)
     this.props.history.push('/checkout-confirmation')
   }
 
@@ -35,7 +36,7 @@ class Checkout extends Component {
       <React.Fragment>
         <div className="CheckoutReviewItemsDiv">
           <h3>Review Items</h3>
-          {/* currently relying the fact that carts are on state because you always have to click into checkout page from the cart -- but this means that you cannot refresh the browser while checking out -- fix later */}
+          {/* currently relying the fact that carts are on state because you always have to click into checkout page from the cart -- but this means that you cannot refresh the browser while checking out -- fetch the cart to fix later */}
           {this.props.user.id ? (
             <div className="CheckoutReviewItems">
               {/* for logged in user: */}
@@ -239,7 +240,8 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
-  submitOrder: (userId, cart) => dispatch(submitOrder(userId, cart))
+  submitOrder: (userId, cart) => dispatch(submitOrder(userId, cart)),
+  clearCart: userId => dispatch(clearCart(userId))
 })
 
 export default connect(mapState, mapDispatch)(Checkout)
