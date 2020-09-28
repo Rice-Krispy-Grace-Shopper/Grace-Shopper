@@ -100,25 +100,25 @@ class Checkout extends Component {
                     <option value="applepay">Apple Pay</option>
                   </select>
                 </div>
-                <label htmlFor="firstname">Name on Card:</label>
+                <label htmlFor="nameoncard">Name on Card:</label>
                 <input
                   className="input-adjust"
                   type="text"
-                  id="firstname1"
+                  id="nameoncard"
                   onChange={this.handleChange}
                 />
                 <label>Credit Card Number:</label>
                 <input
                   className="input-adjust"
                   type="text"
-                  id="lastname1"
+                  id="creditcardnumber"
                   onChange={this.handleChange}
                 />
                 <label>Expiration Date:</label>
                 <input
                   className="input-adjust"
                   type="text"
-                  id="address1"
+                  id="expirationdate"
                   onChange={this.handleChange}
                   placeholder="2/23"
                 />
@@ -126,7 +126,7 @@ class Checkout extends Component {
                 <input
                   className="input-adjust"
                   type="text"
-                  id="city1"
+                  id="securitycode"
                   onChange={this.handleChange}
                 />
               </fieldset>
