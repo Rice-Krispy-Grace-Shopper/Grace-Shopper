@@ -7,8 +7,10 @@ router.get('/:userId', async (req, res, next) => {
   try {
     let ordersData = await Order.findAll({
       where: {userId: req.params.userId},
-      attributes: ['id', 'contents']
+      attributes: ['id', 'contents', 'createdAt']
     })
+
+    console.log('ordersData-->', ordersData.createdAt)
 
     // transform order data into a useful object
     let orders = ordersData.map(order => ({
@@ -17,7 +19,8 @@ router.get('/:userId', async (req, res, next) => {
         productId: item[0],
         qty: item[1],
         price: item[2]
-      }))
+      })),
+      orderDate: order.createdAt
     }))
 
     // orders:

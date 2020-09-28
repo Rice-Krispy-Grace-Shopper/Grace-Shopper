@@ -238,9 +238,9 @@ fieldset {
 }
 
 .SingleOrderDiv {
-  border-bottom: 1px solid #969696;
+  border-bottom: 1.5px solid #969696;
 }
 
 .SingleOrderItemDiv {
-  border-bottom: 0.5px solid #d6d6d6;
+  border-bottom: 0.3px solid #d6d6d6;
 }

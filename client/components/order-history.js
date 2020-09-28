@@ -19,6 +19,7 @@ class OrderHistory extends Component {
               <div key={order.id} className="SingleOrderDiv">
                 {order.contents.map(orderItem => (
                   <div key={orderItem.productId} className="SingleOrderItemDiv">
+                    <h4>Order placed on {order.orderDate.slice(0, 10)}</h4>
                     <p>
                       <strong>Qty:</strong> {orderItem.qty}
                     </p>
