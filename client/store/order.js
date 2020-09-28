@@ -2,10 +2,16 @@ import axios from 'axios'
 
 // ACTION TYPES
 const SUBMIT_ORDER = 'SUBMIT_ORDER'
+const GET_ORDERS = 'GET_ORDERS'
 
 // ACTION CREATORS
 const submittedOrder = () => ({
   type: SUBMIT_ORDER
+})
+
+const gotOrders = orders => ({
+  type: GET_ORDERS,
+  orders
 })
 
 // THUNK CREATORS
@@ -23,14 +29,25 @@ export const submitOrder = (userId, cart) => async dispatch => {
   }
 }
 
+export const getOrders = userId => async dispatch => {
+  try {
+    const {data: orders} = await axios.get(`/api/order/${userId}`)
+    dispatch(gotOrders(orders))
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // INITIAL STATE
-const order = []
+const orders = []
 
 // REDUCER
-export default function(state = order, action) {
+export default function(state = orders, action) {
   switch (action.type) {
     case SUBMIT_ORDER:
       return state
+    case GET_ORDERS:
+      return action.orders
     default:
       return state
   }

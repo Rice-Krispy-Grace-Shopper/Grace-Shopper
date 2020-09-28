@@ -23,6 +23,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             </NavLink>
           </div>
           <div className="NavBarRight">
+            <NavLink to="/orders" activeClassName="NavActive">
+              Orders
+            </NavLink>
             <a href="#" onClick={handleClick}>
               Logout
             </a>

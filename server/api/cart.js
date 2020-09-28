@@ -12,15 +12,7 @@ router.get('/:userId', async (req, res, next) => {
       where: {userId: req.params.userId}
     })
 
-    // below conditional is added because cart is null for users I haven't seeded a cart for
-    // we should probably initilize an empty cart for every user when the user is created when we get there
-    // when that is done, this conditional can be removed (because cart will always exist for a logged in user)
-    if (!cart) {
-      res.json('no items in cart')
-      return
-    }
-
-    // retrive a collection of products to server up -- based on cart with pointers
+    // retrive a collection of products to server up -- based on cart's pointers to productIds
     const productsInCart = await Product.findAll({
       where: {
         id: {

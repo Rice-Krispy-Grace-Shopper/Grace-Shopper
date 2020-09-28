@@ -5,9 +5,9 @@ module.exports = router
 // GET /api/order/:userId -- GET ALL USERS ORDERS
 router.get('/:userId', async (req, res, next) => {
   try {
-    let ordersData = await Order.findAll({
+    const ordersData = await Order.findAll({
       where: {userId: req.params.userId},
-      attributes: ['id', 'contents']
+      attributes: ['id', 'contents', 'createdAt']
     })
 
     // transform order data into a useful object
@@ -17,14 +17,15 @@ router.get('/:userId', async (req, res, next) => {
         productId: item[0],
         qty: item[1],
         price: item[2]
-      }))
+      })),
+      orderDate: order.createdAt
     }))
 
     // orders:
     // [
     //   {
     //     "id": 4,
-    //       "contents": [
+    //     "contents": [
     //         {
     //           "productId": 1,
     //           "qty": 2,
@@ -35,19 +36,11 @@ router.get('/:userId', async (req, res, next) => {
     //           "qty": 4,
     //           "price": 432
     //         }
-    //       ]
+    //       ],
+    //     "orderDate": 2020-09-01-00-00-00...
     //   },
     //   ...
     // ]
-
-    // // add product name to order's contents
-    // orders.forEach((order) =>
-    // 	order.contents.forEach(async (item) => {
-    // 		const product = await Product.findByPk(item.productId, { attributes: [ 'name' ] });
-    // 		// console.log(product.dataValues.name);
-    // 		item.name = product.dataValues.name;
-    // 	})
-    // );
 
     res.json(orders)
   } catch (error) {
