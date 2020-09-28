@@ -2,6 +2,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {removedGuestCart} from '../store/cart-guest'
 
 /**
  * COMPONENT
@@ -25,11 +26,15 @@ const AuthForm = props => {
           <input name="password" type="password" />
         </div>
         <div>
-          <button type="submit">{displayName}</button>
+          <button type="submit" className="LoginSignupBtn">
+            {displayName}
+          </button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
+      <a href="/auth/google" className="LoginGoogle">
+        {displayName} with Google
+      </a>
     </div>
   )
 }
@@ -64,6 +69,7 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
+      dispatch(removedGuestCart())
       dispatch(auth(email, password, formName))
     }
   }

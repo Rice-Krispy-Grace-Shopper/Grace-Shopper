@@ -5,6 +5,8 @@ const GET_CART = 'GET_CART'
 const UPDATE_CART = 'UPDATE_CART'
 const ADD_TO_CART = 'ADD_TO_CART'
 const DELETE_ITEM = 'DELETE ITEM'
+const GET_SUBTOTAL = 'GET_SUBTOTAL'
+const CLEAR_CART = 'CLEAR_CART'
 
 // ACTION CREATORS
 const gotCart = cart => ({
@@ -22,6 +24,14 @@ const addedToCart = () => ({
 
 const deletedFromCart = () => ({
   type: DELETE_ITEM
+})
+
+export const getSubtotal = () => ({
+  type: GET_SUBTOTAL
+})
+
+const clearedCart = () => ({
+  type: CLEAR_CART
 })
 
 // THUNK CREATORS
@@ -70,6 +80,15 @@ export const deleteFromCart = (userId, productId) => async dispatch => {
   }
 }
 
+export const clearCart = userId => async dispatch => {
+  try {
+    await axios.delete(`/api/cart/${userId}`)
+    dispatch(clearedCart())
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // INITIAL STATE
 const cart = {}
 
@@ -92,6 +111,19 @@ export default function(state = cart, action) {
     case DELETE_ITEM:
       return {
         ...state
+      }
+    case GET_SUBTOTAL:
+      return {
+        ...state,
+        subtotal: state.cart.reduce((subtotal, item) => {
+          subtotal += item.price * item.qty
+          return subtotal
+        }, 0)
+      }
+    case CLEAR_CART:
+      return {
+        ...state,
+        cart: []
       }
     default:
       return state

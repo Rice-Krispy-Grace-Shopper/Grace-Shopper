@@ -1,31 +1,52 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div>
-    <h1>Grace Shopper</h1>
+    <h1 className="Logo">Grace Shopper</h1>
     <nav>
       {isLoggedIn ? (
-        <div>
+        <div className="NavBarDiv">
           {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
+          <div className="NavBarLeft">
+            <NavLink to="/home" activeClassName="NavActive">
+              Home
+            </NavLink>
+            <NavLink to="/products" activeClassName="NavActive">
+              Shop
+            </NavLink>
+            <NavLink to="/cart" activeClassName="NavActive">
+              Cart
+            </NavLink>
+          </div>
+          <div className="NavBarRight">
+            <a href="#" onClick={handleClick}>
+              Logout
+            </a>
+          </div>
         </div>
       ) : (
-        <div>
+        <div className="NavBarDiv">
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-
-          <Link to="/signup">Sign Up</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
+          <div className="NavBarLeft">
+            <NavLink to="/products" activeClassName="NavActive">
+              Shop
+            </NavLink>
+            <NavLink to="/cart" activeClassName="NavActive">
+              Cart
+            </NavLink>
+          </div>
+          <div className="NavBarRight">
+            <NavLink to="/login" activeClassName="NavActive">
+              Login
+            </NavLink>
+            <NavLink to="/signup" activeClassName="NavActive">
+              Sign Up
+            </NavLink>
+          </div>
         </div>
       )}
     </nav>

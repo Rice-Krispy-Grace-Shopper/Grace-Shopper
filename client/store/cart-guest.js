@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 // ACTION TYPES
-const UPDATE_GUEST_CART = 'UPDATE_CART'
-const ADD_TO_GUEST_CART = 'ADD_TO_CART'
-const DELETE_GUEST_ITEM = 'DELETE ITEM'
+const UPDATE_GUEST_CART = 'UPDATE_GUEST_CART'
+const ADD_TO_GUEST_CART = 'ADD_TO_GUEST_CART'
+const DELETE_GUEST_ITEM = 'DELETE_GUEST_ITEM'
+const REMOVE_GUEST_CART = 'REMOVE_CART'
 
 // ACTION CREATORS
 const updatedCart = product => ({
@@ -16,20 +17,24 @@ const addedToCart = product => ({
   product
 })
 
-const deletedFromCart = product => ({
+export const deleteItemGuestCart = product => ({
   type: DELETE_GUEST_ITEM,
   product
 })
 
+export const removedGuestCart = () => ({
+  type: REMOVE_GUEST_CART
+})
+
 // THUNK CREATORS
+// unnecessary thunk creator, refactor to action creator
 export const incrementItemQtyGuest = product => dispatch => {
-  // refactor
   product.qty++
   dispatch(updatedCart(product))
 }
 
+// unnecessary thunk creator, refactor to action creator
 export const decrementItemQtyGuest = product => dispatch => {
-  // refactor
   product.qty--
   dispatch(updatedCart(product))
 }
@@ -44,11 +49,6 @@ export const addToGuestCart = productId => async dispatch => {
   }
 }
 
-// unnecessary thunk, can refactor to export action creator later:
-export const deleteFromGuestCart = product => dispatch => {
-  dispatch(deletedFromCart(product))
-}
-
 // INITIAL STATE
 const cart = []
 
@@ -56,7 +56,6 @@ const cart = []
 export default function(state = cart, action) {
   switch (action.type) {
     case UPDATE_GUEST_CART:
-      // remove previous item on state and add it back with qty incremented/decremented:
       return state.map(item => {
         if (item.id !== action.product.id) return item
         else {
@@ -67,6 +66,8 @@ export default function(state = cart, action) {
       return [...state, action.product]
     case DELETE_GUEST_ITEM:
       return state.filter(item => item.id !== action.product.id)
+    case REMOVE_GUEST_CART:
+      return cart
     default:
       return state
   }

@@ -1,159 +1,255 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {submitOrder} from '../store/order'
+import {clearCart} from '../store/cart'
+import {removedGuestCart} from '../store/cart-guest'
 
-export default class Checkout extends Component {
+class Checkout extends Component {
   constructor() {
     super()
     this.state = {
       paymentInfo: ''
     }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
 
-  handleSubmit(event) {
-    event.preventDefault()
+  async handleSubmit(userId, cart) {
+    // event.preventDefault();
+    // for logged in user:
+    if (this.props.user.id) {
+      await this.props.submitOrder(userId, cart)
+      await this.props.clearCart(userId)
+    } else {
+      // for guest
+      this.props.clearGuestCart()
+    }
+    this.props.history.push('/checkout-confirmation')
   }
+
   render() {
+    console.log('state in checkout-->', this.props)
+
+    // non-unique IDs are making browser complain
+    // local state management for form inputs needs attention
     return (
-      <div className="leftsidecart">
-        <div className="paymentDIV">
-          <form>
-            <fieldset className="info">
-              <h1>Payment Method</h1>
-              <div className="dropdown">
-                <select name="paymentmethod" id="paymentmethod">
-                  <option value="mastercard">Mastercard</option>
-                  <option value="discover">Discover</option>
-                  <option value="americanexpress">American Express</option>
-                  <option value="applepay">Apple Pay</option>
-                </select>
-              </div>
-              <label htmlFor="firstname">Name on Card:</label>
-              <input
-                className="input-adjust"
-                type="text"
-                id="firstname1"
-                onChange={this.handleChange}
-              />
-              <label>Credit Card Number:</label>
-              <input
-                className="input-adjust"
-                type="text"
-                id="lastname1"
-                onChange={this.handleChange}
-              />
-              <label>Expiration Date: (02/22)</label>
-              <input
-                className="input-adjust"
-                type="text"
-                id="address1"
-                onChange={this.handleChange}
-              />
-              <label>Security Code:</label>
-              <input
-                className="input-adjust"
-                type="text"
-                id="city1"
-                onChange={this.handleChange}
-              />
-            </fieldset>
-          </form>
+      <React.Fragment>
+        <div className="CheckoutReviewItemsDiv">
+          <h3>Review Items</h3>
+          {/* currently relying the fact that carts are on state because you always have to click into checkout page from the cart -- but this means that you cannot refresh the browser while checking out -- fetch the cart to fix later */}
+          {this.props.user.id ? (
+            <div className="CheckoutReviewItems">
+              {/* for logged in user: */}
+              {this.props.cart.map(item => (
+                <div key={item.id}>
+                  <p>
+                    ({item.qty}) {item.name} ... ${(item.price / 100).toFixed(
+                      2
+                    )}{' '}
+                    each
+                  </p>
+                </div>
+              ))}
+              <p>
+                <strong>Total:</strong> ${(this.props.subtotal / 100).toFixed(
+                  2
+                )}
+              </p>
+            </div>
+          ) : (
+            <div className="CheckoutReviewItems">
+              {/* for guest: */}
+              {this.props.guestCart.map(item => (
+                <div key={item.id}>
+                  <p>
+                    ({item.qty}) {item.name} ... ${(item.price / 100).toFixed(
+                      2
+                    )}{' '}
+                    each
+                  </p>
+                </div>
+              ))}
+              <p>
+                <strong>Total:</strong> ${(
+                  this.props.guestCart.reduce((subtotal, item) => {
+                    subtotal += item.price * item.qty
+                    return subtotal
+                  }, 0) / 100
+                ).toFixed(2)}
+              </p>
+            </div>
+          )}
         </div>
-        <div className="shippingInfo">
-          <form>
+        <div className="leftsidecart CheckoutForm">
+          <div className="paymentDIV">
+            <form>
+              <fieldset className="info">
+                <h3>Payment Method</h3>
+                <div className="dropdown">
+                  <select name="paymentmethod" id="paymentmethod">
+                    <option value="mastercard">Mastercard</option>
+                    <option value="discover">Discover</option>
+                    <option value="americanexpress">American Express</option>
+                    <option value="applepay">Apple Pay</option>
+                  </select>
+                </div>
+                <label htmlFor="firstname">Name on Card:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="firstname1"
+                  onChange={this.handleChange}
+                />
+                <label>Credit Card Number:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="lastname1"
+                  onChange={this.handleChange}
+                />
+                <label>Expiration Date:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="address1"
+                  onChange={this.handleChange}
+                  placeholder="2/23"
+                />
+                <label>Security Code:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="city1"
+                  onChange={this.handleChange}
+                />
+              </fieldset>
+            </form>
+          </div>
+          <div className="shippingInfo">
+            <form>
+              <fieldset className="info">
+                <h3>Billing Information</h3>
+                <label htmlFor="firstname">First Name:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="firstname1"
+                  onChange={this.handleChange}
+                />
+                <label>Last Name:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="lastname1"
+                  onChange={this.handleChange}
+                />
+                <label>Address:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="address1"
+                  onChange={this.handleChange}
+                />
+                <label>City:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="city1"
+                  onChange={this.handleChange}
+                />
+                <label>Country:</label>
+                <input
+                  className="input-adjust"
+                  type="text"
+                  id="country1"
+                  onChange={this.handleChange}
+                />
+              </fieldset>
+            </form>
+          </div>
+          <div className="checkoutInfo">
             <fieldset className="info">
-              <h1>Billing Information</h1>
-              <label htmlFor="firstname">First Name:</label>
+              <h3>Shipping Information</h3>
+              <label htmlFor="billing-info">Same as my Billing Address:</label>
+              <input
+                className="input-adjust"
+                type="checkbox"
+                id="billing-info"
+                name="billing-info"
+                onChange={this.handleChange}
+              />
+              <label>First Name:</label>
               <input
                 className="input-adjust"
                 type="text"
-                id="firstname1"
+                id="firstname2"
                 onChange={this.handleChange}
               />
               <label>Last Name:</label>
               <input
                 className="input-adjust"
                 type="text"
-                id="lastname1"
+                id="lastname2"
                 onChange={this.handleChange}
               />
               <label>Address:</label>
               <input
                 className="input-adjust"
                 type="text"
-                id="address1"
+                id="address2"
                 onChange={this.handleChange}
               />
               <label>City:</label>
               <input
                 className="input-adjust"
                 type="text"
-                id="city1"
+                id="city2"
                 onChange={this.handleChange}
               />
               <label>Country:</label>
               <input
                 className="input-adjust"
                 type="text"
-                id="country1"
+                id="country2"
                 onChange={this.handleChange}
               />
             </fieldset>
-          </form>
+          </div>
         </div>
-        <div className="checkoutInfo">
-          <fieldset className="info">
-            <h1>Shipping Information</h1>
-            <label htmlFor="billing-info">Same as my Billing Address:</label>
-            <input
-              className="input-adjust"
-              type="checkbox"
-              id="billing-info"
-              name="billing-info"
-              onChange={this.handleChange}
-            />
-            <label>First Name:</label>
-            <input
-              className="input-adjust"
-              type="text"
-              id="firstname2"
-              onChange={this.handleChange}
-            />
-            <label>Last Name:</label>
-            <input
-              className="input-adjust"
-              type="text"
-              id="lastname2"
-              onChange={this.handleChange}
-            />
-            <label>Address:</label>
-            <input
-              className="input-adjust"
-              type="text"
-              id="address2"
-              onChange={this.handleChange}
-            />
-            <label>City:</label>
-            <input
-              className="input-adjust"
-              type="text"
-              id="city2"
-              onChange={this.handleChange}
-            />
-            <label>Country:</label>
-            <input
-              className="input-adjust"
-              type="text"
-              id="country2"
-              onChange={this.handleChange}
-            />
-          </fieldset>
-        </div>
-        <input className="input-adjust" type="submit" value="Submit" />
-      </div>
+        {/* leaving in existing submit "button" as comment: */}
+        {/* <input className="input-adjust" type="submit" value="Submit" /> */}
+
+        {/* may want to refactor to button type submit once forms are ready to go */}
+        <button
+          type="button"
+          onClick={() => this.handleSubmit(this.props.user.id, this.props.cart)}
+          className="CheckoutSubmitBtn"
+        >
+          Submit Order
+        </button>
+      </React.Fragment>
     )
   }
 }
+
+const mapState = state => ({
+  cart: state.cart.cart,
+  subtotal: state.cart.subtotal,
+  user: state.user,
+  guestCart: state.guestCart
+})
+
+const mapDispatch = dispatch => ({
+  submitOrder: (userId, cart) => dispatch(submitOrder(userId, cart)),
+  clearCart: userId => dispatch(clearCart(userId)),
+  clearGuestCart: () => dispatch(removedGuestCart())
+})
+
+export default connect(mapState, mapDispatch)(Checkout)

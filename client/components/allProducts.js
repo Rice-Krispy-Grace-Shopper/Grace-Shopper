@@ -41,8 +41,6 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    console.log('Products state------->', this.props)
-
     const products = this.props.products
     const user = this.props.user
 
@@ -51,18 +49,35 @@ export class AllProducts extends React.Component {
         <React.Fragment>
           {products.map(product => {
             return (
-              <div key={product.id}>
-                <Link to={`/products/${product.id}`}>
-                  <img src={product.imageUrl} width="200" height="100" />
-                  <h2>{product.name}</h2>
-                </Link>
-                <h4>${(product.price / 100).toFixed(2)}</h4>
-                <button
-                  type="button"
-                  onClick={() => this.handleAddToCart(user.id, product.id)}
-                >
-                  Add to Cart
-                </button>
+              <div key={product.id} className="AllProductsSingleDiv">
+                <div>
+                  <Link to={`/products/${product.id}`}>
+                    <img
+                      src={product.imageUrl}
+                      width="150"
+                      height="150"
+                      className="AllProductsSingleImage"
+                    />
+                  </Link>
+                </div>
+                <div className="AllProductsSingleContent">
+                  <Link to={`/products/${product.id}`}>
+                    <h3 className="AllProductsSingleName">{product.name}</h3>
+                  </Link>
+                  <p>
+                    <strong>Price:</strong> ${(product.price / 100).toFixed(2)}
+                  </p>
+                  <p>
+                    <strong>Description:</strong> {product.description}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => this.handleAddToCart(user.id, product.id)}
+                    className="AddToCartBtn"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
               </div>
             )
           })}

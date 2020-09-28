@@ -1,16 +1,18 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 import {me} from '../store/user'
 import {
   getCart,
   incrementItemQty,
   decrementItemQty,
-  deleteFromCart
+  deleteFromCart,
+  getSubtotal
 } from '../store/cart'
 import {
   incrementItemQtyGuest,
   decrementItemQtyGuest,
-  deleteFromGuestCart
+  deleteItemGuestCart
 } from '../store/cart-guest'
 
 class Cart extends Component {
@@ -23,10 +25,13 @@ class Cart extends Component {
 
   async componentDidMount() {
     await this.props.getUser()
-    if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
+    // for logged in user
+    if (this.props.user.id) {
+      await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
+    }
   }
 
-  // BUG: cart items are shifting around when incrementing/decrementing!!!!
   async handleIncrement(userId, productId) {
     // for guest:
     if (!this.props.user.id) {
@@ -38,11 +43,12 @@ class Cart extends Component {
       // for logged in user:
       await this.props.increment(userId, productId)
       await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
     }
   }
 
   async handleDecrement(userId, productId) {
-    // for guest -- reconfigure conditional and move const into it!
+    // for guest
     if (!this.props.user.id) {
       const guestCartItem = this.props.guestCart.find(
         item => item.id === productId
@@ -55,6 +61,7 @@ class Cart extends Component {
       if (item.qty === 1) await this.props.deleteItem(userId, productId)
       else await this.props.decrement(userId, productId)
       await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
     }
   }
 
@@ -69,12 +76,11 @@ class Cart extends Component {
       // for logged in user:
       await this.props.deleteItem(userId, productId)
       await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
     }
   }
 
   render() {
-    console.log('Cart state------->', this.props)
-
     const user = this.props.user
 
     let cart
@@ -83,13 +89,33 @@ class Cart extends Component {
 
     return (
       <React.Fragment>
-        <h1>Cart</h1>
         {cart ? (
           <div className="CartContents">
-            {cart.length
-              ? cart.map(item => (
+            {cart.length ? (
+              <React.Fragment>
+                {cart.map(item => (
                   <div key={item.id} className="CartItem">
-                    {item.name}
+                    <div>
+                      <Link to={`/products/${item.id}`}>
+                        <img
+                          src={item.imageUrl}
+                          width="100"
+                          height="100"
+                          className="AllProductsSingleImage"
+                        />
+                      </Link>
+                    </div>
+                    <div className="AllProductsSingleContent">
+                      <Link to={`/products/${item.id}`}>
+                        <h3 className="AllProductsSingleName">{item.name}</h3>
+                      </Link>
+                      <p>
+                        <strong>Price:</strong> ${(item.price / 100).toFixed(2)}
+                      </p>
+                      <p>
+                        <strong>Description:</strong> {item.description}
+                      </p>
+                    </div>
                     <div className="CartItemEditDiv">
                       <button
                         type="button"
@@ -115,12 +141,42 @@ class Cart extends Component {
                       </button>
                     </div>
                   </div>
-                ))
-              : 'no items in cart'}
+                ))}
+                {/* CHECKOUT SECTION */}
+                <div className="CartCheckoutSection">
+                  <p className="CartSubtotal">
+                    {/* if user's logged in: subtotal for user, else, subtotal for guest */}
+                    <strong>Subtotal:</strong> ${user.id
+                      ? (this.props.subtotal / 100).toFixed(2)
+                      : (
+                          cart.reduce((subtotal, item) => {
+                            subtotal += item.price * item.qty
+                            return subtotal
+                          }, 0) / 100
+                        ).toFixed(2)}
+                  </p>
+                  <Link to="/checkout" className="CartCheckoutBtn">
+                    Checkout
+                  </Link>
+                </div>
+              </React.Fragment>
+            ) : (
+              <div className="CartEmptyMsg">
+                <p>Your Cart Is Empty!</p>
+                <p>
+                  Checkout the <Link to="/products">Shop</Link> to add products.
+                </p>
+              </div>
+            )}
           </div>
         ) : (
-          // this is for when no user is logged in if not cart exists at all, remove once guest features are added:
-          'no items in cart'
+          // this is for when no user is logged in if not cart exists at all
+          <div className="CartEmptyMsg">
+            <p>Your Cart Is Empty!</p>
+            <p>
+              Checkout the <Link to="/products">Shop</Link> to add products.
+            </p>
+          </div>
         )}
       </React.Fragment>
     )
@@ -129,6 +185,7 @@ class Cart extends Component {
 
 const mapState = state => ({
   cart: state.cart.cart,
+  subtotal: state.cart.subtotal,
   user: state.user,
   guestCart: state.guestCart
 })
@@ -144,7 +201,8 @@ const mapDispatch = dispatch => ({
     dispatch(deleteFromCart(userId, productId)),
   incrementGuest: product => dispatch(incrementItemQtyGuest(product)),
   decrementGuest: product => dispatch(decrementItemQtyGuest(product)),
-  deleteItemGuest: product => dispatch(deleteFromGuestCart(product))
+  deleteItemGuest: product => dispatch(deleteItemGuestCart(product)),
+  getSubtotal: () => dispatch(getSubtotal())
 })
 
 export default connect(mapState, mapDispatch)(Cart)

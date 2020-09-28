@@ -26,7 +26,8 @@ async function seed() {
     let cereal = {
       name: faker.commerce.productName(),
       description: faker.lorem.sentence(),
-      price: faker.random.number({max: 1000})
+      price: faker.random.number({max: 1000}),
+      imageUrl: `${faker.image.business()}${faker.random.number({max: 100})}`
     }
     products.push(cereal)
   }
