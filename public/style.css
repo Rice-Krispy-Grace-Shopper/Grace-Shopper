@@ -237,10 +237,22 @@ fieldset {
   margin-left: 1em;
 }
 
-.SingleOrderDiv {
-  border-bottom: 1.5px solid #969696;
+.OrderHistoryDiv h2 {
+  margin-bottom: 1.5em;
 }
 
-.SingleOrderItemDiv {
-  border-bottom: 0.3px solid #d6d6d6;
+.SingleOrderDiv {
+  border-top: 1.5px solid #969696;
+  margin: 2em 0;
+  padding-top: 1em;
+}
+
+/* "Order placed on..." */
+.SingleOrderDiv h4 {
+  text-decoration: underline;
+}
+
+.SingleOrderLineItem {
+  display: flex;
+  justify-content: space-between;
 }
