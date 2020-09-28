@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import ls from 'local-storage'
 import {me} from '../store/user'
 import {
   getCart,
@@ -25,6 +26,7 @@ class Cart extends Component {
 
   async componentDidMount() {
     await this.props.getUser()
+
     // for logged in user
     if (this.props.user.id) {
       await this.props.getCart(this.props.user.id)
@@ -81,10 +83,12 @@ class Cart extends Component {
   }
 
   render() {
+    console.log('local storage in Cart-->', this.props.guestCartLocalStorage)
+
     const user = this.props.user
 
     let cart
-    if (!user.id) cart = this.props.guestCart
+    if (!user.id) cart = this.props.guestCartLocalStorage
     else cart = this.props.cart
 
     return (
@@ -187,7 +191,8 @@ const mapState = state => ({
   cart: state.cart.cart,
   subtotal: state.cart.subtotal,
   user: state.user,
-  guestCart: state.guestCart
+  guestCart: state.guestCart,
+  guestCartLocalStorage: ls.get('guestCart_')
 })
 
 const mapDispatch = dispatch => ({

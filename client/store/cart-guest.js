@@ -1,4 +1,5 @@
 import axios from 'axios'
+import ls from 'local-storage'
 
 // ACTION TYPES
 const UPDATE_GUEST_CART = 'UPDATE_GUEST_CART'
@@ -63,6 +64,7 @@ export default function(state = cart, action) {
         }
       })
     case ADD_TO_GUEST_CART:
+      ls.set('guestCart_', [...(ls.get('guestCart_') || []), action.product])
       return [...state, action.product]
     case DELETE_GUEST_ITEM:
       return state.filter(item => item.id !== action.product.id)
