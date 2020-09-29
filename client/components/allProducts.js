@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import ls from 'local-storage'
 import {me} from '../store/user'
 import {gotProducts} from '../store/product'
 import {Link} from 'react-router-dom'
@@ -25,19 +26,18 @@ export class AllProducts extends React.Component {
   async handleAddToCart(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      let itemIdxInCart = this.props.guestCart.findIndex(
+      let itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       )
       // if item is not already in cart, add it but with qty 0
       if (itemIdxInCart === -1) await this.props.addToGuestCart(productId)
-      itemIdxInCart = this.props.guestCart.findIndex(
+      itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       )
       // always increment qty of item by 1
-      this.props.incrementGuest(this.props.guestCart[itemIdxInCart])
+      this.props.incrementGuest(this.props.guestCartLocalStorage[itemIdxInCart])
     } else {
       // for logged in user
-
       const itemIdxInCart = this.props.cart.findIndex(
         item => item.id === productId
       )
@@ -108,7 +108,8 @@ const mapState = state => {
     products: state.products.products,
     user: state.user,
     cart: state.cart.cart,
-    guestCart: state.guestCart
+    guestCart: state.guestCart,
+    guestCartLocalStorage: ls.get('guestCart_')
   }
 }
 
