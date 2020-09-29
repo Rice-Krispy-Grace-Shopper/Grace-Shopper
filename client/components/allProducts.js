@@ -52,7 +52,6 @@ export class AllProducts extends React.Component {
   }
 
   render() {
-    console.log('gcls in products', this.props.guestCartLocalStorage)
     const products = this.props.products
     const user = this.props.user
 

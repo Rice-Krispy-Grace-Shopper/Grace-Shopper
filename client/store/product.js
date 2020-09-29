@@ -83,7 +83,6 @@ export const putProduct = (id, newInfo) => async dispatch => {
 }
 export const destroyProduct = id => async dispatch => {
   try {
-    console.log('DESTROY PRODUCT!!!', id)
     await axios.delete(`/api/products/${id}`)
     return dispatch(deleteProduct(id))
   } catch (error) {
@@ -94,6 +93,7 @@ export const destroyProduct = id => async dispatch => {
  * REDUCER
  */
 export default function(state = [], action) {
+  console.log('state in products reducer', state)
   switch (action.type) {
     case GET_PRODUCTS:
       return {...state, products: action.products}
@@ -104,10 +104,10 @@ export default function(state = [], action) {
     case EDIT_PRODUCT:
       return {...state, product: action.product}
     case DELETE_PRODUCT:
-      console.log('STATE FORM REDUCER', state)
       return {
         ...state,
-        product: state.products.filter(
+        // changed this key from product to products:
+        products: state.products.filter(
           product => product.id !== Number(action.id)
         )
       }
