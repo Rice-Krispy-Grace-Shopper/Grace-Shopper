@@ -181,6 +181,10 @@ button {
   background-color: #594fdb;
 }
 
+.CheckoutWarning {
+  color: red;
+}
+
 /* CHECKOUT PAGE ========================================= */
 
 .CheckoutForm {

@@ -22,6 +22,11 @@ class Cart extends Component {
     this.handleIncrement = this.handleIncrement.bind(this)
     this.handleDecrement = this.handleDecrement.bind(this)
     this.handleDeleteItem = this.handleDeleteItem.bind(this)
+    this.handleGoToCheckout = this.handleGoToCheckout.bind(this)
+
+    this.state = {
+      warningToggled: false
+    }
   }
 
   async componentDidMount() {
@@ -82,6 +87,11 @@ class Cart extends Component {
       await this.props.getCart(this.props.user.id)
       this.props.getSubtotal()
     }
+  }
+
+  handleGoToCheckout() {
+    if (this.props.user.id) this.props.history.push('/checkout')
+    else this.setState({warningToggled: true})
   }
 
   render() {
@@ -160,9 +170,20 @@ class Cart extends Component {
                           }, 0) / 100
                         ).toFixed(2)}
                   </p>
-                  <Link to="/checkout" className="CartCheckoutBtn">
+                  {this.state.warningToggled ? (
+                    <p className="CheckoutWarning">
+                      Please <Link to="/signup">Sign Up</Link> to Checkout!
+                    </p>
+                  ) : (
+                    ''
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => this.handleGoToCheckout()}
+                    className="CartCheckoutBtn"
+                  >
                     Checkout
-                  </Link>
+                  </button>
                 </div>
               </React.Fragment>
             ) : (
