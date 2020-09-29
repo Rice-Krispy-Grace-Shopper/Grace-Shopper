@@ -98,6 +98,35 @@ button {
   background-color: #594fdb;
 }
 
+/* SINGLE PRODUCT ========================================== */
+
+.SingleProductDiv {
+  border-bottom: 1px solid #969696;
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+}
+
+.SingleProductHeaderDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SingleProductDeleteBtn {
+  border: none;
+  border-radius: 5px;
+  background-color: #ff4747;
+  color: #fff;
+  font-size: 1.5rem;
+  width: 30px;
+  height: 30px;
+  margin-right: 1em;
+}
+
+.SingleProductDeleteBtn:hover {
+  background-color: #de3e3e;
+}
+
 /* CART ==================================================== */
 
 .CartItem {

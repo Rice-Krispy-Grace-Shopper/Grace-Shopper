@@ -17,6 +17,8 @@ export class AllProducts extends React.Component {
   }
 
   async componentDidMount() {
+    // set empty guest cart into localstorage initially (only if needed):
+    if (!this.props.guestCartLocalStorage) ls.set('guestCart_', [])
     await this.props.getProducts()
     await this.props.getUser()
     if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
@@ -50,6 +52,7 @@ export class AllProducts extends React.Component {
   }
 
   render() {
+    console.log('gcls in products', this.props.guestCartLocalStorage)
     const products = this.props.products
     const user = this.props.user
 
