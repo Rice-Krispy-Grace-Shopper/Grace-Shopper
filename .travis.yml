@@ -22,6 +22,6 @@ before_deploy:
 deploy:
   skip_cleanup: true # prevents travis from deleting the build
   provider: heroku
-  app: cereal-grace-shopper # see README
+  app: grace-shopper # see README
   api_key:
-    secure: YOUR-***ENCRYPTED***-API-KEY-HERE # see README
+    secure: 95893412-1a16-4d9e-83ba-a335801992a1 # see README
