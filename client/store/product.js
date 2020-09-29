@@ -10,11 +10,6 @@ const EDIT_PRODUCT = 'EDIT_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 /**
- * INITIAL STATE
- */
-const initialState = {}
-
-/**
  * ACTION CREATORS
  */
 const getProducts = products => ({
@@ -93,7 +88,6 @@ export const destroyProduct = id => async dispatch => {
  * REDUCER
  */
 export default function(state = [], action) {
-  console.log('state in products reducer', state)
   switch (action.type) {
     case GET_PRODUCTS:
       return {...state, products: action.products}

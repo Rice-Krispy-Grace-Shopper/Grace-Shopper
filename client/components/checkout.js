@@ -47,7 +47,6 @@ class Checkout extends Component {
   }
 
   render() {
-    console.log('ls on state in checkout-->', this.props.guestCartLocalStorage)
     // non-unique IDs are making browser complain
     // local state management for form inputs needs attention
     return (
