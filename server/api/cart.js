@@ -45,6 +45,7 @@ router.put('/:userId', async (req, res, next) => {
     cart.contents = req.body
     cart.changed('contents', true)
     await cart.save()
+    res.sendStatus(204)
   } catch (error) {
     next(error)
   }

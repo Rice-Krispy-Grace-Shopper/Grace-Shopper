@@ -1,5 +1,4 @@
 import axios from 'axios'
-import ls from 'local-storage'
 
 // ACTION TYPES
 const GET_CART = 'GET_CART'
@@ -102,9 +101,7 @@ export const saveGuestCart = (userId, cart) => async dispatch => {
       let cartItem = [item.id, item.qty]
       cartData.push(cartItem)
     })
-    console.log('cartData in thunk-->', cartData)
     await axios.put(`/api/cart/${userId}`, cartData)
-    ls.remove('guestCart_')
     dispatch(savedGuestCart())
   } catch (error) {
     console.error(error)

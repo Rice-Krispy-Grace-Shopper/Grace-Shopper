@@ -11,13 +11,17 @@ import ls from 'local-storage'
  */
 export class UserHome extends Component {
   async componentDidMount() {
-    // should error when logging in existing user??
-    console.log('ls in userhome-->', this.props.guestCartLocalStorage)
-    if (this.props.guestCartLocalStorage)
+    // currently, if a guest has items in a cart, if a user logs in, the guest items will overwrite the user's cart when logging in:
+    if (
+      this.props.guestCartLocalStorage &&
+      this.props.guestCartLocalStorage.length
+    ) {
       await this.props.saveGuestCart(
         this.props.user.id,
         this.props.guestCartLocalStorage
       )
+    }
+    await this.props.removeGuestCart()
   }
 
   render() {
