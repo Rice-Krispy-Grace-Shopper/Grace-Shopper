@@ -5,6 +5,7 @@ import {gotProducts} from '../store/product'
 import {Link} from 'react-router-dom'
 import {getCart, incrementItemQty, addToCart} from '../store/cart'
 import {addToGuestCart, incrementItemQtyGuest} from '../store/cart-guest'
+import Pagination from 'react-js-pagination'
 
 export class AllProducts extends React.Component {
   constructor(props) {
@@ -14,7 +15,6 @@ export class AllProducts extends React.Component {
       activePage: 4
     }
     this.handleAddToCart = this.handleAddToCart.bind(this)
-    this.handlePageChange = this.handlePageChange(this)
   }
 
   async componentDidMount() {
@@ -46,6 +46,10 @@ export class AllProducts extends React.Component {
     this.props.history.push('/cart')
   }
 
+  handlePageChange(pageNumber) {
+    this.setState({activePage: pageNumber})
+  }
+
   render() {
     const products = this.props.products
     const user = this.props.user
@@ -60,7 +64,7 @@ export class AllProducts extends React.Component {
               itemsCountPerPage={25}
               totalItemsCount={100}
               pageRangeDisplayed={5}
-              onChange={this.handlePageChange()}
+              onChange={this.handlePageChange.bind(this)}
             />
             {products.map(product => {
               return (
