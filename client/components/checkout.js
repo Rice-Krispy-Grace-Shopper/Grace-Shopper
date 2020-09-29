@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import ls from 'local-storage'
+import {me} from '../store/user'
 import {submitOrder} from '../store/order'
-import {clearCart} from '../store/cart'
+import {clearCart, getCart, getSubtotal} from '../store/cart'
 import {removedGuestCart} from '../store/cart-guest'
 
 class Checkout extends Component {
@@ -14,6 +15,16 @@ class Checkout extends Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  async componentDidMount() {
+    await this.props.getUser()
+
+    // for logged in user
+    if (this.props.user.id) {
+      await this.props.getCart(this.props.user.id)
+      this.props.getSubtotal()
+    }
   }
 
   handleChange(event) {
@@ -48,16 +59,18 @@ class Checkout extends Component {
           {this.props.user.id ? (
             <div className="CheckoutReviewItems">
               {/* for logged in user: */}
-              {this.props.cart.map(item => (
-                <div key={item.id}>
-                  <p>
-                    ({item.qty}) {item.name} ... ${(item.price / 100).toFixed(
-                      2
-                    )}{' '}
-                    each
-                  </p>
-                </div>
-              ))}
+              {this.props.cart
+                ? this.props.cart.map(item => (
+                    <div key={item.id}>
+                      <p>
+                        ({item.qty}) {item.name} ... ${(
+                          item.price / 100
+                        ).toFixed(2)}{' '}
+                        each
+                      </p>
+                    </div>
+                  ))
+                : 'No Items To Review'}
               <p>
                 <strong>Total:</strong> ${(this.props.subtotal / 100).toFixed(
                   2
@@ -249,9 +262,12 @@ const mapState = state => ({
 })
 
 const mapDispatch = dispatch => ({
+  getUser: () => dispatch(me()),
+  getCart: userId => dispatch(getCart(userId)),
   submitOrder: (userId, cart) => dispatch(submitOrder(userId, cart)),
   clearCart: userId => dispatch(clearCart(userId)),
-  clearGuestCart: () => dispatch(removedGuestCart())
+  clearGuestCart: () => dispatch(removedGuestCart()),
+  getSubtotal: () => dispatch(getSubtotal())
 })
 
 export default connect(mapState, mapDispatch)(Checkout)

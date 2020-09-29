@@ -35,15 +35,16 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
-// POST /api/cart/:userId -- SUBMIT AN ORDER
-router.post('/:userId', async (req, res, next) => {
+// PUT /api/cart/:userId -- SAVE GUEST CART
+router.put('/:userId', async (req, res, next) => {
   try {
     // req.body shape --> [ [ 1, 4 ], [ 12, 2 ] ]
-    const cart = await Cart.create({
-      contents: req.body,
-      userId: req.params.userId
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
     })
-    res.json(cart)
+    cart.contents = req.body
+    cart.changed('contents', true)
+    await cart.save()
   } catch (error) {
     next(error)
   }

@@ -26,7 +26,7 @@ class Cart extends Component {
 
   async componentDidMount() {
     await this.props.getUser()
-
+    console.log('user in cart-->', this.props.user)
     // for logged in user
     if (this.props.user.id) {
       await this.props.getCart(this.props.user.id)
@@ -86,6 +86,8 @@ class Cart extends Component {
   }
 
   render() {
+    console.log('localStorage-->', this.props.guestCartLocalStorage)
+
     const user = this.props.user
 
     let cart
