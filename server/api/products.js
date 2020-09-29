@@ -36,6 +36,7 @@ const isAdmin = (req, res, next) => {
 }
 // Post route for admin - Add products
 router.post('/', isAdmin, async (req, res, next) => {
+  console.log('THIS IS THE ROUTE', req.body)
   try {
     const newProduct = await Product.create(req.body)
     res.json(newProduct)

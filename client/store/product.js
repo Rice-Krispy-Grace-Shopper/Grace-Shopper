@@ -76,13 +76,14 @@ export const addedProduct = product => async dispatch => {
 export const putProduct = (id, newInfo) => async dispatch => {
   try {
     const {data} = await axios.put(`/api/products/${id}`, newInfo)
-    return dispatch(editProduct(data))
+    dispatch(editProduct(data))
   } catch (error) {
     console.log(error)
   }
 }
 export const destroyProduct = id => async dispatch => {
   try {
+    console.log('DESTROY PRODUCT!!!', id)
     await axios.delete(`/api/products/${id}`)
     return dispatch(deleteProduct(id))
   } catch (error) {
@@ -99,11 +100,17 @@ export default function(state = [], action) {
     case GET_SINGLE:
       return {...state, product: action.product}
     case ADD_PRODUCTS:
-      return [...state, action.product]
+      return {...state, product: action.product}
     case EDIT_PRODUCT:
-      return action.product
+      return {...state, product: action.product}
     case DELETE_PRODUCT:
-      return state.filter(product => product.id !== Number(action.id))
+      console.log('STATE FORM REDUCER', state)
+      return {
+        ...state,
+        product: state.products.filter(
+          product => product.id !== Number(action.id)
+        )
+      }
     default:
       return state
   }

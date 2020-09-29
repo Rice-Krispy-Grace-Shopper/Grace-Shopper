@@ -56,7 +56,8 @@ export class SingleProduct extends React.Component {
 
   handleDelete = event => {
     event.preventDefault()
-    this.props.deleteProduct(this.props.user.id)
+    this.props.deleteProduct(this.props.product.id)
+    this.props.history.push('/products')
   }
 
   handleUpdate = event => {
@@ -72,6 +73,7 @@ export class SingleProduct extends React.Component {
       price,
       imageUrl
     })
+    this.props.getSingle(productId)
   }
 
   render() {
