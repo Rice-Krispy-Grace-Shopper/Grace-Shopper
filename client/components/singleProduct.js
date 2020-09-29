@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import ls from 'local-storage'
 import {me} from '../store/user'
 import {gotSingle, putProduct, destroyProduct} from '../store/product'
 import {getCart, incrementItemQty, addToCart} from '../store/cart'
@@ -12,6 +13,8 @@ export class SingleProduct extends React.Component {
   }
 
   async componentDidMount() {
+    // set empty guest cart into localstorage initially (only if needed):
+    if (!this.props.guestCartLocalStorage) ls.set('guestCart_', [])
     const id = this.props.match.params.id
     await this.props.getSingle(id)
     await this.props.getUser()
@@ -21,14 +24,14 @@ export class SingleProduct extends React.Component {
   async handleAddToCart(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      let itemIdxInCart = this.props.guestCart.findIndex(
+      let itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       )
       if (itemIdxInCart === -1) await this.props.addToGuestCart(productId)
-      itemIdxInCart = this.props.guestCart.findIndex(
+      itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       ) // re-assign after adding to cart
-      this.props.incrementGuest(this.props.guestCart[itemIdxInCart])
+      this.props.incrementGuest(this.props.guestCartLocalStorage[itemIdxInCart])
     } else {
       // for logged in user
       const itemIdxInCart = this.props.cart.findIndex(
@@ -174,7 +177,8 @@ const mapState = state => {
     product: state.products.product,
     user: state.user,
     cart: state.cart.cart,
-    guestCart: state.guestCart
+    guestCart: state.guestCart,
+    guestCartLocalStorage: ls.get('guestCart_')
   }
 }
 
