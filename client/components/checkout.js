@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import ls from 'local-storage'
 import {submitOrder} from '../store/order'
 import {clearCart} from '../store/cart'
 import {removedGuestCart} from '../store/cart-guest'
@@ -66,7 +67,7 @@ class Checkout extends Component {
           ) : (
             <div className="CheckoutReviewItems">
               {/* for guest: */}
-              {this.props.guestCart.map(item => (
+              {this.props.guestCartLocalStorage.map(item => (
                 <div key={item.id}>
                   <p>
                     ({item.qty}) {item.name} ... ${(item.price / 100).toFixed(
@@ -78,7 +79,7 @@ class Checkout extends Component {
               ))}
               <p>
                 <strong>Total:</strong> ${(
-                  this.props.guestCart.reduce((subtotal, item) => {
+                  this.props.guestCartLocalStorage.reduce((subtotal, item) => {
                     subtotal += item.price * item.qty
                     return subtotal
                   }, 0) / 100
@@ -243,7 +244,8 @@ const mapState = state => ({
   cart: state.cart.cart,
   subtotal: state.cart.subtotal,
   user: state.user,
-  guestCart: state.guestCart
+  guestCart: state.guestCart,
+  guestCartLocalStorage: ls.get('guestCart_')
 })
 
 const mapDispatch = dispatch => ({

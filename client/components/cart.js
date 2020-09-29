@@ -37,7 +37,8 @@ class Cart extends Component {
   async handleIncrement(userId, productId) {
     // for guest:
     if (!this.props.user.id) {
-      const guestCartItem = this.props.guestCart.find(
+      // changed
+      const guestCartItem = this.props.guestCartLocalStorage.find(
         item => item.id === productId
       )
       this.props.incrementGuest(guestCartItem)
@@ -52,7 +53,8 @@ class Cart extends Component {
   async handleDecrement(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      const guestCartItem = this.props.guestCart.find(
+      // changed
+      const guestCartItem = this.props.guestCartLocalStorage.find(
         item => item.id === productId
       )
       if (guestCartItem.qty > 1) this.props.decrementGuest(guestCartItem)
@@ -70,7 +72,8 @@ class Cart extends Component {
   async handleDeleteItem(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      const guestCartItem = this.props.guestCart.find(
+      // changed
+      const guestCartItem = this.props.guestCartLocalStorage.find(
         item => item.id === productId
       )
       this.props.deleteItemGuest(guestCartItem)
@@ -83,11 +86,10 @@ class Cart extends Component {
   }
 
   render() {
-    console.log('local storage in Cart-->', this.props.guestCartLocalStorage)
-
     const user = this.props.user
 
     let cart
+    // changed
     if (!user.id) cart = this.props.guestCartLocalStorage
     else cart = this.props.cart
 
