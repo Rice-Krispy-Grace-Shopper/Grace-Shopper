@@ -6,8 +6,8 @@ import axios from 'axios'
 const GET_PRODUCTS = 'GET_PRODUCTS'
 const ADD_PRODUCTS = 'ADD_PRODUCTS'
 const GET_SINGLE = 'GET_SINGLE'
-const DELETE_PRODUCTS = 'DELETE_PRODUCTS'
-const UPDATE_PRODUCTS = 'UPDATE_PRODUCTS'
+const EDIT_PRODUCT = 'EDIT_PRODUCT'
+const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 /**
  * INITIAL STATE
@@ -32,14 +32,14 @@ const getSingle = product => ({
   product
 })
 
-const deleteProduct = product => ({
-  type: DELETE_PRODUCTS,
-  product
+export const editProduct = (id, newInfo) => ({
+  type: EDIT_PRODUCT,
+  id,
+  newInfo
 })
-
-const updateProduct = product => ({
-  type: UPDATE_PRODUCTS,
-  product
+export const deleteProduct = id => ({
+  type: DELETE_PRODUCT,
+  id
 })
 
 /**
@@ -73,21 +73,20 @@ export const addedProduct = product => async dispatch => {
   }
 }
 
-export const deletedProduct = id => async dispatch => {
+export const putProduct = (id, newInfo) => async dispatch => {
   try {
-    await axios.delete(`/api/products/${id}`)
-    dispatch(deleteProduct(id))
+    const {data} = await axios.put(`/api/products/${id}`, newInfo)
+    return dispatch(editProduct(data))
   } catch (error) {
-    console.error(error)
+    console.log(error)
   }
 }
-
-export const updatedProduct = (id, productUpdate) => async dispatch => {
+export const destroyProduct = id => async dispatch => {
   try {
-    const res = await axios.put(`/api/products/${id}`, productUpdate)
-    dispatch(updateProduct(res.data))
+    await axios.delete(`/api/products/${id}`)
+    return dispatch(deleteProduct(id))
   } catch (error) {
-    console.error(error)
+    console.log(error)
   }
 }
 /**
@@ -101,12 +100,10 @@ export default function(state = [], action) {
       return {...state, product: action.product}
     case ADD_PRODUCTS:
       return [...state, action.product]
-    case DELETE_PRODUCTS:
-      return state.filter(product => product.id !== action)
-    case UPDATE_PRODUCTS:
-      return state.filter(
-        product => (product.id === action.product.id ? action.product : product)
-      )
+    case EDIT_PRODUCT:
+      return action.product
+    case DELETE_PRODUCT:
+      return state.filter(product => product.id !== Number(action.id))
     default:
       return state
   }

@@ -17,9 +17,16 @@ async function seed() {
       email: faker.internet.email(name),
       password: faker.internet.password()
     }
-
     users.push(newUser)
   }
+
+  let murphy = {
+    email: 'murphy@email.com',
+    password: '123',
+    isAdmin: true
+  }
+
+  users.push(murphy)
 
   let products = []
   for (let j = 0; j < 100; j++) {
