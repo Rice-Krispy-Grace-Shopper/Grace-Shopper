@@ -28,17 +28,22 @@ export class AllProducts extends React.Component {
       let itemIdxInCart = this.props.guestCart.findIndex(
         item => item.id === productId
       )
+      // if item is not already in cart, add it but with qty 0
       if (itemIdxInCart === -1) await this.props.addToGuestCart(productId)
       itemIdxInCart = this.props.guestCart.findIndex(
         item => item.id === productId
-      ) // re-assign after adding to cart
+      )
+      // always increment qty of item by 1
       this.props.incrementGuest(this.props.guestCart[itemIdxInCart])
     } else {
       // for logged in user
+
       const itemIdxInCart = this.props.cart.findIndex(
         item => item.id === productId
       )
+      // if item is not already in cart, add it but with qty 0
       if (itemIdxInCart === -1) await this.props.addToCart(userId, productId)
+      // always increment qty of item by 1
       await this.props.increment(userId, productId)
     }
     this.props.history.push('/cart')

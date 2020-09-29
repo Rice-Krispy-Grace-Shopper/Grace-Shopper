@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
+import ls from 'local-storage'
 import {me} from '../store/user'
 import {
   getCart,
@@ -21,6 +22,11 @@ class Cart extends Component {
     this.handleIncrement = this.handleIncrement.bind(this)
     this.handleDecrement = this.handleDecrement.bind(this)
     this.handleDeleteItem = this.handleDeleteItem.bind(this)
+    this.handleGoToCheckout = this.handleGoToCheckout.bind(this)
+
+    this.state = {
+      warningToggled: false
+    }
   }
 
   async componentDidMount() {
@@ -35,7 +41,8 @@ class Cart extends Component {
   async handleIncrement(userId, productId) {
     // for guest:
     if (!this.props.user.id) {
-      const guestCartItem = this.props.guestCart.find(
+      // changed
+      const guestCartItem = this.props.guestCartLocalStorage.find(
         item => item.id === productId
       )
       this.props.incrementGuest(guestCartItem)
@@ -50,7 +57,8 @@ class Cart extends Component {
   async handleDecrement(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      const guestCartItem = this.props.guestCart.find(
+      // changed
+      const guestCartItem = this.props.guestCartLocalStorage.find(
         item => item.id === productId
       )
       if (guestCartItem.qty > 1) this.props.decrementGuest(guestCartItem)
@@ -68,7 +76,8 @@ class Cart extends Component {
   async handleDeleteItem(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      const guestCartItem = this.props.guestCart.find(
+      // changed
+      const guestCartItem = this.props.guestCartLocalStorage.find(
         item => item.id === productId
       )
       this.props.deleteItemGuest(guestCartItem)
@@ -80,11 +89,17 @@ class Cart extends Component {
     }
   }
 
+  handleGoToCheckout() {
+    if (this.props.user.id) this.props.history.push('/checkout')
+    else this.setState({warningToggled: true})
+  }
+
   render() {
     const user = this.props.user
 
     let cart
-    if (!user.id) cart = this.props.guestCart
+    // changed
+    if (!user.id) cart = this.props.guestCartLocalStorage
     else cart = this.props.cart
 
     return (
@@ -155,9 +170,20 @@ class Cart extends Component {
                           }, 0) / 100
                         ).toFixed(2)}
                   </p>
-                  <Link to="/checkout" className="CartCheckoutBtn">
+                  {this.state.warningToggled ? (
+                    <p className="CheckoutWarning">
+                      Please <Link to="/signup">Sign Up</Link> to Checkout!
+                    </p>
+                  ) : (
+                    ''
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => this.handleGoToCheckout()}
+                    className="CartCheckoutBtn"
+                  >
                     Checkout
-                  </Link>
+                  </button>
                 </div>
               </React.Fragment>
             ) : (
@@ -187,7 +213,8 @@ const mapState = state => ({
   cart: state.cart.cart,
   subtotal: state.cart.subtotal,
   user: state.user,
-  guestCart: state.guestCart
+  guestCart: state.guestCart,
+  guestCartLocalStorage: ls.get('guestCart_')
 })
 
 const mapDispatch = dispatch => ({

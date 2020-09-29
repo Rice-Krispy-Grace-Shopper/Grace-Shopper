@@ -7,6 +7,7 @@ const ADD_TO_CART = 'ADD_TO_CART'
 const DELETE_ITEM = 'DELETE ITEM'
 const GET_SUBTOTAL = 'GET_SUBTOTAL'
 const CLEAR_CART = 'CLEAR_CART'
+const SAVE_GUEST_CART = 'SAVE_GUEST_CART'
 
 // ACTION CREATORS
 const gotCart = cart => ({
@@ -32,6 +33,10 @@ export const getSubtotal = () => ({
 
 const clearedCart = () => ({
   type: CLEAR_CART
+})
+
+const savedGuestCart = () => ({
+  type: SAVE_GUEST_CART
 })
 
 // THUNK CREATORS
@@ -89,6 +94,20 @@ export const clearCart = userId => async dispatch => {
   }
 }
 
+export const saveGuestCart = (userId, cart) => async dispatch => {
+  try {
+    let cartData = []
+    cart.forEach(item => {
+      let cartItem = [item.id, item.qty]
+      cartData.push(cartItem)
+    })
+    await axios.put(`/api/cart/${userId}`, cartData)
+    dispatch(savedGuestCart())
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // INITIAL STATE
 const cart = {}
 
@@ -124,6 +143,10 @@ export default function(state = cart, action) {
       return {
         ...state,
         cart: []
+      }
+    case SAVE_GUEST_CART:
+      return {
+        ...state
       }
     default:
       return state

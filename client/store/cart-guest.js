@@ -1,4 +1,5 @@
 import axios from 'axios'
+import ls from 'local-storage'
 
 // ACTION TYPES
 const UPDATE_GUEST_CART = 'UPDATE_GUEST_CART'
@@ -54,8 +55,20 @@ const cart = []
 
 // REDUCER
 export default function(state = cart, action) {
+  const guestCart_ = 'guestCart_'
+  const currentLocalState = ls.get('guestCart_')
+
   switch (action.type) {
     case UPDATE_GUEST_CART:
+      ls.set(
+        guestCart_,
+        currentLocalState.map(item => {
+          if (item.id !== action.product.id) return item
+          else {
+            return action.product
+          }
+        })
+      )
       return state.map(item => {
         if (item.id !== action.product.id) return item
         else {
@@ -63,10 +76,16 @@ export default function(state = cart, action) {
         }
       })
     case ADD_TO_GUEST_CART:
+      ls.set(guestCart_, [...(currentLocalState || []), action.product])
       return [...state, action.product]
     case DELETE_GUEST_ITEM:
+      ls.set(guestCart_, [
+        ...(currentLocalState.filter(item => item.id !== action.product.id) ||
+          [])
+      ])
       return state.filter(item => item.id !== action.product.id)
     case REMOVE_GUEST_CART:
+      ls.remove(guestCart_)
       return cart
     default:
       return state

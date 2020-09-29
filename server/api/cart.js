@@ -35,6 +35,22 @@ router.get('/:userId', async (req, res, next) => {
   }
 })
 
+// PUT /api/cart/:userId -- SAVE GUEST CART
+router.put('/:userId', async (req, res, next) => {
+  try {
+    // req.body shape --> [ [ 1, 4 ], [ 12, 2 ] ]
+    const cart = await Cart.findOne({
+      where: {userId: req.params.userId}
+    })
+    cart.contents = req.body
+    cart.changed('contents', true)
+    await cart.save()
+    res.sendStatus(204)
+  } catch (error) {
+    next(error)
+  }
+})
+
 // POST /api/cart/:userId/:productId/add -- add item to cart
 router.post('/:userId/:productId/add', async (req, res, next) => {
   try {
