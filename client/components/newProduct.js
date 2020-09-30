@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {addedProduct} from '../store/product'
-import {me} from '../store/user'
 
 class NewProduct extends Component {
   constructor() {
@@ -10,9 +9,7 @@ class NewProduct extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  componentDidMount() {
-    this.props.getUser(this.props.match.params.id)
-  }
+  componentDidMount() {}
 
   handleChange(event) {
     this.setState({
@@ -23,54 +20,53 @@ class NewProduct extends Component {
     })
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
     const name = event.target.name.value
     const description = event.target.description.value
     const image = event.target.image.value
     const price = event.target.price.value
-    this.props.newProduct({name, description, image, price})
-    //Need to fetch product id to pass in.
-    // this.props.history.push(`/products/${this.props.product.id}`)
+
+    await this.props.newProduct({name, description, image, price})
+    this.props.history.push(`/products/${this.props.addedProduct.id}`)
   }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name of Product:
-            <input type="text" name="name" onChange={this.handleChange} />
-          </label>
+      <form onSubmit={this.handleSubmit} className="NewProductForm">
+        <label>
+          Product Name:
+          <input type="text" name="name" onChange={this.handleChange} />
+        </label>
 
-          <label>
-            Description of Product:
-            <input
-              type="text"
-              name="description"
-              onChange={this.handleChange}
-            />
-          </label>
+        <label>
+          Description:
+          <input type="text" name="description" onChange={this.handleChange} />
+        </label>
 
-          <label>
-            Price of Product:
-            <input type="text" name="price" onChange={this.handleChange} />
-          </label>
+        <label>
+          Price:
+          <input type="text" name="price" onChange={this.handleChange} />
+        </label>
 
-          <label>
-            Image of Product:
-            <input type="text" name="image" onChange={this.handleChange} />
-          </label>
-          <button type="submit">Submit New Product</button>
-        </form>
-      </div>
+        <label>
+          Image URL:
+          <input type="text" name="image" onChange={this.handleChange} />
+        </label>
+        <button type="submit" className="NewProductFormSubmitBtn">
+          Submit
+        </button>
+      </form>
     )
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  newProduct: newItem => dispatch(addedProduct(newItem)),
-  getUser: userId => dispatch(me(userId))
+const mapState = state => ({
+  addedProduct: state.products.product
 })
 
-export default connect(null, mapDispatchToProps)(NewProduct)
+const mapDispatchToProps = dispatch => ({
+  newProduct: newItem => dispatch(addedProduct(newItem))
+})
+
+export default connect(mapState, mapDispatchToProps)(NewProduct)

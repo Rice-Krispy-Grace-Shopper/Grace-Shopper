@@ -3,9 +3,10 @@ import {connect} from 'react-redux'
 import ls from 'local-storage'
 import {me} from '../store/user'
 import {gotProducts} from '../store/product'
-import {Link} from 'react-router-dom'
+import {Link, Route} from 'react-router-dom'
 import {getCart, incrementItemQty, addToCart} from '../store/cart'
 import {addToGuestCart, incrementItemQtyGuest} from '../store/cart-guest'
+import {NewProduct} from './'
 
 export class AllProducts extends React.Component {
   constructor(props) {
@@ -14,6 +15,9 @@ export class AllProducts extends React.Component {
       loaded: false
     }
     this.handleAddToCart = this.handleAddToCart.bind(this)
+    this.state = {
+      toggleProductForm: false
+    }
   }
 
   async componentDidMount() {
@@ -51,15 +55,39 @@ export class AllProducts extends React.Component {
     this.props.history.push('/cart')
   }
 
+  displayProductForm() {
+    this.setState({
+      toggleProductForm: true
+    })
+  }
+
   render() {
     const products = this.props.products
     const user = this.props.user
 
     if (products) {
-      if (!this.state.loaded) return <div>Products Are Loading</div>
+      if (!this.state.loaded)
+        return <div className="LoadingMsg">Products Are Loading...</div>
       else {
         return (
           <React.Fragment>
+            {/* NEW PRODUCT FORM */}
+            <div className="AllProductsAddProductDiv">
+              <button
+                type="button"
+                onClick={() => this.displayProductForm()}
+                className="AllProductsAddProductBtn"
+              >
+                Add New Product
+              </button>
+              {this.state.toggleProductForm ? (
+                <div className="AllProductsNewProductFormDiv">
+                  <Route component={NewProduct} />
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
             {products.map(product => {
               return (
                 <div key={product.id} className="AllProductsSingleDiv">

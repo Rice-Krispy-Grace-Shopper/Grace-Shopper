@@ -98,6 +98,55 @@ button {
   background-color: #594fdb;
 }
 
+.LoadingMsg {
+  margin-left: 1.5em;
+}
+
+/* ADD PRODUCT */
+
+.AllProductsAddProductDiv {
+  border-bottom: 1px solid #969696;
+}
+
+.AllProductsAddProductBtn {
+  margin: 1.5em 0 1.5em 1.5em;
+  border: none;
+  border-radius: 5px;
+  color: #404040;
+  background-color: #36f599;
+  padding: 0.6em 1.2em;
+}
+
+.AllProductsAddProductBtn:hover,
+.AllProductsAddProductBtn:focus {
+  background-color: #32db88;
+}
+
+.AllProductsNewProductFormDiv {
+  margin: 0 0 1.5em 1.5em;
+}
+
+/* ADD PRODUCT FORM */
+
+.NewProductForm input {
+  display: block;
+  margin: 0.5em 0 1em;
+  padding: 0.5em;
+  min-width: 250px;
+}
+
+.NewProductFormSubmitBtn {
+  border: none;
+  border-radius: 5px;
+  background-color: #a8a8a8;
+  color: #fff;
+  padding: 0.75em 1.25em;
+}
+
+.NewProductFormSubmitBtn:hover {
+  background-color: #8f8f8f;
+}
+
 /* SINGLE PRODUCT ========================================== */
 
 .SingleProductDiv {

@@ -94,7 +94,11 @@ export default function(state = [], action) {
     case GET_SINGLE:
       return {...state, product: action.product}
     case ADD_PRODUCTS:
-      return {...state, product: action.product}
+      return {
+        ...state,
+        product: action.product,
+        products: [...state.products, action.product]
+      }
     case EDIT_PRODUCT:
       return {...state, product: action.product}
     case DELETE_PRODUCT:
