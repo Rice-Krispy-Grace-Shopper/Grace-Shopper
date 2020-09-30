@@ -108,6 +108,11 @@ button {
   border-bottom: 1px solid #969696;
 }
 
+.AllProductsAddCloseBtnsDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
 .AllProductsAddProductBtn {
   margin: 1.5em 0 1.5em 1.5em;
   border: none;
@@ -120,6 +125,20 @@ button {
 .AllProductsAddProductBtn:hover,
 .AllProductsAddProductBtn:focus {
   background-color: #32db88;
+}
+
+.AllProductsCloseFormBtn {
+  background-color: #fff;
+  border: none;
+  font-size: 2rem;
+  margin-right: 0.5em;
+  color: #525252;
+}
+
+.AllProductsCloseFormBtn:hover,
+.AllProductsCloseFormBtn:focus {
+  color: #919191;
+  outline: none;
 }
 
 .AllProductsNewProductFormDiv {

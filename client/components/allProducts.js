@@ -73,13 +73,32 @@ export class AllProducts extends React.Component {
           <React.Fragment>
             {/* NEW PRODUCT FORM */}
             <div className="AllProductsAddProductDiv">
-              <button
-                type="button"
-                onClick={() => this.displayProductForm()}
-                className="AllProductsAddProductBtn"
-              >
-                Add New Product
-              </button>
+              <div className="AllProductsAddCloseBtnsDiv">
+                {/* OPEN FORM BUTTON */}
+                <button
+                  type="button"
+                  onClick={() => this.displayProductForm()}
+                  className="AllProductsAddProductBtn"
+                >
+                  Add New Product
+                </button>
+                {/* CLOSE FORM BUTTON */}
+                {this.state.toggleProductForm ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      this.setState({
+                        toggleProductForm: false
+                      })
+                    }
+                    className="AllProductsCloseFormBtn"
+                  >
+                    &times;
+                  </button>
+                ) : (
+                  ''
+                )}
+              </div>
               {this.state.toggleProductForm ? (
                 <div className="AllProductsNewProductFormDiv">
                   <Route component={NewProduct} />
