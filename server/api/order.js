@@ -2,7 +2,7 @@ const router = require('express').Router()
 const {Order, Product} = require('../db/models')
 module.exports = router
 
-// GET /api/order/:userId -- GET ALL USERS ORDERS
+// GET /api/order/:userId -- GET ALL OF A USERS ORDERS
 router.get('/:userId', async (req, res, next) => {
   try {
     const ordersData = await Order.findAll({
@@ -11,7 +11,7 @@ router.get('/:userId', async (req, res, next) => {
     })
 
     // transform order data into a useful object
-    let orders = ordersData.map(order => ({
+    const orders = ordersData.map(order => ({
       id: order.id,
       contents: order.contents.map(item => ({
         productId: item[0],
