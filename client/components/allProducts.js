@@ -71,42 +71,46 @@ export class AllProducts extends React.Component {
       else {
         return (
           <React.Fragment>
-            {/* NEW PRODUCT FORM */}
-            <div className="AllProductsAddProductDiv">
-              <div className="AllProductsAddCloseBtnsDiv">
-                {/* OPEN FORM BUTTON */}
-                <button
-                  type="button"
-                  onClick={() => this.displayProductForm()}
-                  className="AllProductsAddProductBtn"
-                >
-                  Add New Product
-                </button>
-                {/* CLOSE FORM BUTTON */}
-                {this.state.toggleProductForm ? (
+            {/* NEW PRODUCT FORM -- only display for admin */}
+            {this.props.user.id && this.props.user.isAdmin ? (
+              <div className="AllProductsAddProductDiv">
+                <div className="AllProductsAddCloseBtnsDiv">
+                  {/* OPEN FORM BUTTON */}
                   <button
                     type="button"
-                    onClick={() =>
-                      this.setState({
-                        toggleProductForm: false
-                      })
-                    }
-                    className="AllProductsCloseFormBtn"
+                    onClick={() => this.displayProductForm()}
+                    className="AllProductsAddProductBtn"
                   >
-                    &times;
+                    Add New Product
                   </button>
+                  {/* CLOSE FORM BUTTON */}
+                  {this.state.toggleProductForm ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        this.setState({
+                          toggleProductForm: false
+                        })
+                      }
+                      className="AllProductsCloseFormBtn"
+                    >
+                      &times;
+                    </button>
+                  ) : (
+                    ''
+                  )}
+                </div>
+                {this.state.toggleProductForm ? (
+                  <div className="AllProductsNewProductFormDiv">
+                    <Route component={NewProduct} />
+                  </div>
                 ) : (
                   ''
                 )}
               </div>
-              {this.state.toggleProductForm ? (
-                <div className="AllProductsNewProductFormDiv">
-                  <Route component={NewProduct} />
-                </div>
-              ) : (
-                ''
-              )}
-            </div>
+            ) : (
+              ' '
+            )}
             {products.map(product => {
               return (
                 <div key={product.id} className="AllProductsSingleDiv">

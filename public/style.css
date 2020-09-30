@@ -99,7 +99,8 @@ button {
 }
 
 .LoadingMsg {
-  margin-left: 1.5em;
+  margin: 1.5em;
+  font-size: 1.35rem;
 }
 
 /* ADD PRODUCT */
