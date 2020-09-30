@@ -38,10 +38,11 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       const firstName = profile.name.givenName
       const lastName = profile.name.familyName
       const fullName = profile.displayName
+      const password = '123'
 
       User.findOrCreate({
         where: {googleId},
-        defaults: {email, imgUrl, firstName, lastName, fullName}
+        defaults: {email, imgUrl, firstName, lastName, fullName, password}
       })
         .then(([user]) => done(null, user))
         .catch(done)
