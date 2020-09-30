@@ -26,15 +26,6 @@ button {
 
 /* LOGIN / SIGNUP / WELCOME ================================= */
 
-.LoginSignupBtn {
-  /* border: none;
-	border-radius: 5px;
-	color: #fff;
-	background-color: #a8a8a8;
-	padding: 0.6em 1.2em;
-	font-size: 0.9rem; */
-}
-
 .LoginGoogle {
   margin-left: 1em;
 }
@@ -96,6 +87,112 @@ button {
 .AddToCartBtn:hover,
 .AddToCartBtn:focus {
   background-color: #594fdb;
+}
+
+.LoadingMsg {
+  margin: 1.5em;
+  font-size: 1.35rem;
+}
+
+/* ADD PRODUCT */
+
+.AllProductsAddProductDiv {
+  border-bottom: 1px solid #969696;
+}
+
+.AllProductsAddCloseBtnsDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.AllProductsAddProductBtn {
+  margin: 1.5em 0 1.5em 1.5em;
+  border: none;
+  border-radius: 5px;
+  color: #404040;
+  background-color: #36f599;
+  padding: 0.6em 1.2em;
+}
+
+.AllProductsAddProductBtn:hover,
+.AllProductsAddProductBtn:focus {
+  background-color: #32db88;
+}
+
+.AllProductsCloseFormBtn {
+  background-color: #fff;
+  border: none;
+  font-size: 2rem;
+  margin-right: 0.5em;
+  color: #525252;
+}
+
+.AllProductsCloseFormBtn:hover,
+.AllProductsCloseFormBtn:focus {
+  color: #919191;
+  outline: none;
+}
+
+.AllProductsNewProductFormDiv {
+  margin: 0 0 1.5em 1.5em;
+}
+
+/* ADD PRODUCT FORM */
+
+.NewProductForm input {
+  display: block;
+  margin: 0.5em 0 1em;
+  padding: 0.5em;
+  min-width: 250px;
+}
+
+.NewProductForm textarea {
+  display: block;
+  margin: 0.5em 0 1em;
+  padding: 0.5em;
+  min-width: 250px;
+  min-height: 50px;
+}
+
+.NewProductFormSubmitBtn {
+  border: none;
+  border-radius: 5px;
+  background-color: #a8a8a8;
+  color: #fff;
+  padding: 0.75em 1.25em;
+}
+
+.NewProductFormSubmitBtn:hover {
+  background-color: #8f8f8f;
+}
+
+/* SINGLE PRODUCT ========================================== */
+
+.SingleProductDiv {
+  border-bottom: 1px solid #969696;
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+}
+
+.SingleProductHeaderDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.SingleProductDeleteBtn {
+  border: none;
+  border-radius: 5px;
+  background-color: #ff4747;
+  color: #fff;
+  font-size: 1.5rem;
+  width: 30px;
+  height: 30px;
+  margin-right: 1em;
+}
+
+.SingleProductDeleteBtn:hover {
+  background-color: #de3e3e;
 }
 
 /* CART ==================================================== */
@@ -253,7 +350,7 @@ fieldset {
 
 /* "Order placed on..." */
 .SingleOrderDiv h4 {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .SingleOrderLineItem {

@@ -10,11 +10,6 @@ const EDIT_PRODUCT = 'EDIT_PRODUCT'
 const DELETE_PRODUCT = 'DELETE_PRODUCT'
 
 /**
- * INITIAL STATE
- */
-const initialState = {}
-
-/**
  * ACTION CREATORS
  */
 const getProducts = products => ({
@@ -83,7 +78,6 @@ export const putProduct = (id, newInfo) => async dispatch => {
 }
 export const destroyProduct = id => async dispatch => {
   try {
-    console.log('DESTROY PRODUCT!!!', id)
     await axios.delete(`/api/products/${id}`)
     return dispatch(deleteProduct(id))
   } catch (error) {
@@ -100,14 +94,18 @@ export default function(state = [], action) {
     case GET_SINGLE:
       return {...state, product: action.product}
     case ADD_PRODUCTS:
-      return {...state, product: action.product}
+      return {
+        ...state,
+        product: action.product,
+        products: [...state.products, action.product]
+      }
     case EDIT_PRODUCT:
       return {...state, product: action.product}
     case DELETE_PRODUCT:
-      console.log('STATE FORM REDUCER', state)
       return {
         ...state,
-        product: state.products.filter(
+        // changed this key from product to products:
+        products: state.products.filter(
           product => product.id !== Number(action.id)
         )
       }

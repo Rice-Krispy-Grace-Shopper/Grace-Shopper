@@ -1,10 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import ls from 'local-storage'
 import {me} from '../store/user'
 import {gotProducts} from '../store/product'
-import {Link} from 'react-router-dom'
+import {Link, Route} from 'react-router-dom'
 import {getCart, incrementItemQty, addToCart} from '../store/cart'
 import {addToGuestCart, incrementItemQtyGuest} from '../store/cart-guest'
+import {NewProduct} from './'
 
 export class AllProducts extends React.Component {
   constructor(props) {
@@ -13,9 +15,14 @@ export class AllProducts extends React.Component {
       loaded: false
     }
     this.handleAddToCart = this.handleAddToCart.bind(this)
+    this.state = {
+      toggleProductForm: false
+    }
   }
 
   async componentDidMount() {
+    // set empty guest cart into localstorage initially (only if needed):
+    if (!this.props.guestCartLocalStorage) ls.set('guestCart_', [])
     await this.props.getProducts()
     await this.props.getUser()
     if (this.props.user.id) await this.props.getCart(this.props.user.id) // for logged in user
@@ -25,19 +32,18 @@ export class AllProducts extends React.Component {
   async handleAddToCart(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      let itemIdxInCart = this.props.guestCart.findIndex(
+      let itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       )
       // if item is not already in cart, add it but with qty 0
       if (itemIdxInCart === -1) await this.props.addToGuestCart(productId)
-      itemIdxInCart = this.props.guestCart.findIndex(
+      itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       )
       // always increment qty of item by 1
-      this.props.incrementGuest(this.props.guestCart[itemIdxInCart])
+      this.props.incrementGuest(this.props.guestCartLocalStorage[itemIdxInCart])
     } else {
       // for logged in user
-
       const itemIdxInCart = this.props.cart.findIndex(
         item => item.id === productId
       )
@@ -49,15 +55,62 @@ export class AllProducts extends React.Component {
     this.props.history.push('/cart')
   }
 
+  displayProductForm() {
+    this.setState({
+      toggleProductForm: true
+    })
+  }
+
   render() {
     const products = this.props.products
     const user = this.props.user
 
     if (products) {
-      if (!this.state.loaded) return <div>Products Are Loading</div>
+      if (!this.state.loaded)
+        return <div className="LoadingMsg">Products Are Loading...</div>
       else {
         return (
           <React.Fragment>
+            {/* NEW PRODUCT FORM -- only display for admin */}
+            {this.props.user.id && this.props.user.isAdmin ? (
+              <div className="AllProductsAddProductDiv">
+                <div className="AllProductsAddCloseBtnsDiv">
+                  {/* OPEN FORM BUTTON */}
+                  <button
+                    type="button"
+                    onClick={() => this.displayProductForm()}
+                    className="AllProductsAddProductBtn"
+                  >
+                    Add New Product
+                  </button>
+                  {/* CLOSE FORM BUTTON */}
+                  {this.state.toggleProductForm ? (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        this.setState({
+                          toggleProductForm: false
+                        })
+                      }
+                      className="AllProductsCloseFormBtn"
+                    >
+                      &times;
+                    </button>
+                  ) : (
+                    ''
+                  )}
+                </div>
+                {this.state.toggleProductForm ? (
+                  <div className="AllProductsNewProductFormDiv">
+                    <Route component={NewProduct} />
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+            ) : (
+              ' '
+            )}
             {products.map(product => {
               return (
                 <div key={product.id} className="AllProductsSingleDiv">
@@ -108,7 +161,8 @@ const mapState = state => {
     products: state.products.products,
     user: state.user,
     cart: state.cart.cart,
-    guestCart: state.guestCart
+    guestCart: state.guestCart,
+    guestCartLocalStorage: ls.get('guestCart_')
   }
 }
 

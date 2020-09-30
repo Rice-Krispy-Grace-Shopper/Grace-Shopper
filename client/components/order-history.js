@@ -15,7 +15,7 @@ class OrderHistory extends Component {
   render() {
     return (
       <div className="OrderHistoryDiv">
-        <h2>Order History:</h2>
+        <h2>Order History</h2>
         {this.props.orders.length
           ? this.props.orders.map(order => {
               // calculate total for each order -- this is temporary solution
@@ -33,7 +33,7 @@ class OrderHistory extends Component {
                     {`${order.orderDate.slice(5, 10)}-${order.orderDate.slice(
                       0,
                       4
-                    )}`}
+                    )}:`}
                   </h4>
                   {order.contents.map(orderItem => (
                     <div

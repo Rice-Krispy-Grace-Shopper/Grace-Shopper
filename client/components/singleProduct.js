@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import ls from 'local-storage'
 import {me} from '../store/user'
 import {gotSingle, putProduct, destroyProduct} from '../store/product'
 import {getCart, incrementItemQty, addToCart} from '../store/cart'
@@ -12,6 +13,8 @@ export class SingleProduct extends React.Component {
   }
 
   async componentDidMount() {
+    // set empty guest cart into localstorage initially (only if needed):
+    if (!this.props.guestCartLocalStorage) ls.set('guestCart_', [])
     const id = this.props.match.params.id
     await this.props.getSingle(id)
     await this.props.getUser()
@@ -21,14 +24,14 @@ export class SingleProduct extends React.Component {
   async handleAddToCart(userId, productId) {
     // for guest
     if (!this.props.user.id) {
-      let itemIdxInCart = this.props.guestCart.findIndex(
+      let itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       )
       if (itemIdxInCart === -1) await this.props.addToGuestCart(productId)
-      itemIdxInCart = this.props.guestCart.findIndex(
+      itemIdxInCart = this.props.guestCartLocalStorage.findIndex(
         item => item.id === productId
       ) // re-assign after adding to cart
-      this.props.incrementGuest(this.props.guestCart[itemIdxInCart])
+      this.props.incrementGuest(this.props.guestCartLocalStorage[itemIdxInCart])
     } else {
       // for logged in user
       const itemIdxInCart = this.props.cart.findIndex(
@@ -54,14 +57,16 @@ export class SingleProduct extends React.Component {
     })
   }
 
-  handleDelete = event => {
-    event.preventDefault()
+  handleDelete = () => {
+    // event.preventDefault();
+    if (!this.props.user.isAdmin) return // add message
     this.props.deleteProduct(this.props.product.id)
     this.props.history.push('/products')
   }
 
   handleUpdate = event => {
     event.preventDefault()
+    if (!this.props.user.isAdmin) return // add message
     const name = event.target.nameOfProduct.value
     const description = event.target.descriptionOfProduct.value
     const imageUrl = event.target.imageOfProduct.value
@@ -80,80 +85,87 @@ export class SingleProduct extends React.Component {
     const product = this.props.product
     const user = this.props.user
 
-    console.log('THIS IS OUR STATE', this.props)
-
     if (product) {
       return (
-        <div>
-          <h2>{product.name}</h2>
-          <img src={product.imageUrl} width="200" height="200" />
-          <p>
-            <strong>Price:</strong> ${(product.price / 100).toFixed(2)}
-          </p>
-          <p>
-            <strong>Description:</strong> {product.description}
-          </p>
-          <button
-            type="button"
-            onClick={() => this.handleAddToCart(user.id, product.id)}
-            className="AddToCartBtn"
-          >
-            Add to Cart
-          </button>
-          <div>
+        <React.Fragment>
+          <div className="SingleProductDiv">
+            <div className="SingleProductHeaderDiv">
+              <h2>{product.name}</h2>
+              {/* DELETE PRODUCT BUTTON -- only display for admin users */}
+              {this.props.user.id && this.props.user.isAdmin ? (
+                <button
+                  type="button"
+                  className="SingleProductDeleteBtn"
+                  onClick={() =>
+                    window.confirm(
+                      'This action will permanently delete the product in the database. Are you sure you want to continue?'
+                    ) && this.handleDelete()
+                  }
+                >
+                  &times;
+                </button>
+              ) : (
+                ''
+              )}
+            </div>
+            <img src={product.imageUrl} width="200" height="200" />
+            <p>
+              <strong>Price:</strong> ${(product.price / 100).toFixed(2)}
+            </p>
+            <p>
+              <strong>Description:</strong> {product.description}
+            </p>
             <button
               type="button"
-              className="remove-product"
-              onClick={this.handleDelete}
+              onClick={() => this.handleAddToCart(user.id, product.id)}
+              className="AddToCartBtn"
             >
-              Delete {product.name}
+              Add to Cart
             </button>
           </div>
-          <div />
-          <div>
-            <h1>Update {product.name}'s Information</h1>
-            <div>
-              <form onSubmit={this.handleUpdate}>
-                <label>
-                  Name of Product:
-                  <input
-                    type="text"
-                    name="nameOfProduct"
-                    onChange={this.handleChange}
-                  />
-                </label>
+          <div className="SingleProductAdminForm">
+            {/* DELETE PRODUCT BUTTON -- only display for admin users */}
+            {/* {this.props.user.id && this.props.user.isAdmin ? (
+							<div className="SingleProductAdminDeleteBtn">
+								<button type="button" className="remove-product" onClick={this.handleDelete}>
+									&times;
+								</button>
+							</div>
+						) : (
+							''
+						)} */}
 
-                <label>
-                  Description of Product:
-                  <input
-                    type="text"
-                    name="descriptionOfProduct"
-                    onChange={this.handleChange}
-                  />
-                </label>
+            {/* EDIT PRODUCT FORM -- only display for admin users */}
+            {/* {this.props.user.id && this.props.user.isAdmin ? (
+							<div className="SingleProductAdminEditDiv">
+								<form onSubmit={this.handleUpdate}>
+									<label>
+										Name:
+										<input type="text" name="nameOfProduct" onChange={this.handleChange} />
+									</label>
 
-                <label>
-                  Price of Product:
-                  <input
-                    type="text"
-                    name="priceOfProduct"
-                    onChange={this.handleChange}
-                  />
-                </label>
+									<label>
+										Description:
+										<input type="text" name="descriptionOfProduct" onChange={this.handleChange} />
+									</label>
 
-                <label>
-                  Image of Product:
-                  <input
-                    type="text"
-                    name="imageOfProduct"
-                    onChange={this.handleChange}
-                  />
-                </label>
-                <button type="submit">Submit</button>
-              </form>
-            </div>
+									<label>
+										Price:
+										<input type="text" name="priceOfProduct" onChange={this.handleChange} />
+									</label>
+
+									<label>
+										Image URL:
+										<input type="text" name="imageOfProduct" onChange={this.handleChange} />
+									</label>
+									<button type="submit">Submit</button>
+								</form>
+							</div>
+						) : (
+							''
+						)} */}
           </div>
-        </div>
+        </React.Fragment>
       )
     } else {
       return <div />
@@ -165,7 +177,8 @@ const mapState = state => {
     product: state.products.product,
     user: state.user,
     cart: state.cart.cart,
-    guestCart: state.guestCart
+    guestCart: state.guestCart,
+    guestCartLocalStorage: ls.get('guestCart_')
   }
 }
 
