@@ -92,9 +92,6 @@ class Cart extends Component {
   }
 
   render() {
-    console.log('guest cart', this.props.guestCart)
-    console.log('guest cart local', this.props.guestCartLocalStorage)
-
     const user = this.props.user
 
     let cart
