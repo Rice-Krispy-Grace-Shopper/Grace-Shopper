@@ -26,15 +26,6 @@ button {
 
 /* LOGIN / SIGNUP / WELCOME ================================= */
 
-.LoginSignupBtn {
-  /* border: none;
-	border-radius: 5px;
-	color: #fff;
-	background-color: #a8a8a8;
-	padding: 0.6em 1.2em;
-	font-size: 0.9rem; */
-}
-
 .LoginGoogle {
   margin-left: 1em;
 }
@@ -153,6 +144,14 @@ button {
   margin: 0.5em 0 1em;
   padding: 0.5em;
   min-width: 250px;
+}
+
+.NewProductForm textarea {
+  display: block;
+  margin: 0.5em 0 1em;
+  padding: 0.5em;
+  min-width: 250px;
+  min-height: 50px;
 }
 
 .NewProductFormSubmitBtn {

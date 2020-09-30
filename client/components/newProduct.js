@@ -36,22 +36,42 @@ class NewProduct extends Component {
       <form onSubmit={this.handleSubmit} className="NewProductForm">
         <label>
           Product Name:
-          <input type="text" name="name" onChange={this.handleChange} />
+          <input
+            type="text"
+            name="name"
+            required
+            onChange={this.handleChange}
+          />
         </label>
 
         <label>
           Description:
-          <input type="text" name="description" onChange={this.handleChange} />
+          <textarea
+            type="text"
+            name="description"
+            required
+            onChange={this.handleChange}
+          />
         </label>
 
         <label>
           Price:
-          <input type="text" name="price" onChange={this.handleChange} />
+          <input
+            type="text"
+            name="price"
+            required
+            onChange={this.handleChange}
+          />
         </label>
 
         <label>
           Image URL:
-          <input type="text" name="image" onChange={this.handleChange} />
+          <input
+            type="text"
+            name="image"
+            placeholder="Optional"
+            onChange={this.handleChange}
+          />
         </label>
         <button type="submit" className="NewProductFormSubmitBtn">
           Submit
